@@ -31,6 +31,7 @@ form.addEventListener('submit', async (e) => {
     const lastBot = messagesEl.querySelectorAll('.bot');
     if (lastBot.length) lastBot[lastBot.length-1].remove();
     if(data.answer) addMessage(data.answer, 'bot');
+    else if(data.error) addMessage('Error: ' + data.error, 'bot');
     else addMessage('Sorry — no answer available.', 'bot');
   } catch(err) {
     addMessage('Error contacting the chatbot: ' + err.message, 'bot');
