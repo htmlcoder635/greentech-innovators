@@ -5,47 +5,36 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GreenTech Innovators</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
-  <style>
-    /* Extra styles to enhance hero and cards */
-    .hero {
-      position: relative;
-      background: url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
-      color: white;
-      text-align: center;
-      padding: 120px 20px;
-    }
-    .hero::after {
-      content:"";
-      position:absolute; top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.45);
-      z-index:1;
-    }
-    .hero h2, .hero p, .hero .btn {
-      position: relative; z-index:2;
-    }
-    .btn {
-      display:inline-block;
-      margin-top:20px;
-      padding:12px 28px;
-      background:#0b6623;
-      color:white;
-      border-radius:8px;
-      text-decoration:none;
-      font-weight:bold;
-      transition:0.3s;
-    }
-    .btn:hover {
-      background:#075a28;
-      transform:translateY(-3px);
-    }
+</head>
+<body>
+  <header class="site-header">
+    <h1>GreenTech Innovators</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="about.html">About</a>
+      <a href="volunteer.html">Volunteer</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
 
-    .features {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:20px;
-      padding:40px 25px;
-    }
-    .card {
-      background:white;
-      padding:22px;
-      border-ra
+  <main>
+    <section class="hero">
+      <h2>Student-led AI for climate education & action</h2>
+      <p>We build tools that help New Jersey students and communities learn about local climate risks and take measurable action.</p>
+      <a class="btn" href="projects.html">See Projects</a>
+    </section>
+
+    <section class="mission">
+      <h3>Our Mission</h3>
+      <p>GreenTech Innovators builds accessible AI tools to improve climate literacy and local resilience in New Jersey.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> GreenTech Innovators</p>
+  </footer>
+
+  <script>document.getElementById('year').innerText = new Date().getFullYear()</script>
+</body>
+</html>
