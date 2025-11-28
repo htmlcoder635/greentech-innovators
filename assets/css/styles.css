@@ -1,16 +1,149 @@
-:root{--green:#0b6623;--muted:#f5f7f4}
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;color:#111;background:#fff}
-.site-header{background:var(--green);color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
-.site-header nav a{color:#fff;margin-left:12px;text-decoration:none}
-.hero{padding:36px;background:var(--muted)}
-.btn{display:inline-block;padding:8px 12px;background:var(--green);color:#fff;text-decoration:none;border-radius:6px}
-.mission{padding:18px}
-#chat-container{max-width:700px;margin:18px auto;border:1px solid #ddd;padding:12px;border-radius:8px;background:#fafafa}
-#messages{min-height:200px;max-height:400px;overflow:auto;padding:8px;background:#fff;border-radius:6px}
-.message{margin:8px 0;padding:6px 8px;border-radius:8px;display:inline-block;max-width:85%}
-.message.user{background:#e6ffe6;margin-left:auto;text-align:right}
-.message.bot{background:#e8f6ea;color:#0b6623;text-align:left}
-#chat-form{display:flex;margin-top:8px}
-#chat-input{flex:1;padding:8px;border:1px solid #ccc;border-radius:6px}
-#chat-form button{margin-left:8px;padding:8px 12px}
-.note{font-size:0.9rem;color:#666}
+/* Updated styles.css for modern, consistent look across all pages */
+:root{
+  --green:#0b6623;
+  --darkgreen:#075a28;
+  --light:#f6fff8;
+  --muted:#eef1ef;
+  --text:#111;
+}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  color:var(--text);
+  background:var(--light);
+}
+
+.site-header{
+  background:linear-gradient(90deg,var(--green),var(--darkgreen));
+  color:#fff;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.site-header h1{
+  margin:0;
+  font-size:1.6rem;
+}
+
+.site-header nav a{
+  color:#fff;
+  margin-left:16px;
+  text-decoration:none;
+  font-weight:500;
+  transition:0.2s;
+}
+
+.site-header nav a:hover{
+  opacity:0.8;
+}
+
+/* Hero Section */
+.hero{
+  position:relative;
+  background:url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+  color:white;
+  text-align:center;
+  padding:120px 20px;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.45);
+  z-index:1;
+}
+
+.hero h2, .hero p, .hero .btn{
+  position:relative;
+  z-index:2;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:20px;
+  padding:12px 28px;
+  background:var(--green);
+  color:white;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:bold;
+  transition:0.3s;
+}
+
+.btn:hover{
+  background:var(--darkgreen);
+  transform:translateY(-3px);
+}
+
+/* Features / Cards */
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  padding:40px 25px;
+}
+
+.card{
+  background:white;
+  padding:22px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  transition:0.25s;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
+}
+
+.card h3{
+  margin-top:0;
+  color:var(--darkgreen);
+}
+
+/* Mission Section */
+.mission{
+  padding:40px 25px;
+  text-align:center;
+}
+
+.mission h3{
+  font-size:1.8rem;
+  color:var(--darkgreen);
+}
+
+.mission p{
+  font-size:1.1rem;
+  line-height:1.6;
+  max-width:750px;
+  margin:auto;
+}
+
+/* Footer */
+footer{
+  text-align:center;
+  padding:18px;
+  background:var(--muted);
+  color:#444;
+  font-size:0.95rem;
+}
+
+/* Responsive adjustments */
+@media(max-width:600px){
+  .hero h2{
+    font-size:2rem;
+  }
+  .hero p{
+    font-size:1rem;
+  }
+}
