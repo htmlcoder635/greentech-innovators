@@ -3,7 +3,7 @@ const form = document.getElementById('chat-form');
 const input = document.getElementById('chat-input');
 
 // Set your backend URL here (deployed server).
-const BACKEND_URL = "https://greentech-api-njl1.onrender.com/api/chat";
+const BACKEND_URL = "https://greentech-api-njl1.onrender.com/chat";
 
 function addMessage(text, cls='bot') {
   const div = document.createElement('div');
