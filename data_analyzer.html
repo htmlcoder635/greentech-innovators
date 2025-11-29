@@ -42,7 +42,6 @@
                 <!-- File Input & Column Selectors -->
                 <div class="col-span-12 md:col-span-8 space-y-4">
                     <label class="block text-sm font-medium text-gray-700">1. Upload File (CSV, XLS, PDF, JPEG, PNG)</label>
-                    <!-- Updated accept attribute for all requested files -->
                     <input id="file-input" type="file" accept=".csv,.xls,.xlsx,.pdf,.jpeg,.jpg,.png" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition duration-150"/>
                     <div class="flex space-x-4">
                         <select id="timecol" title="Choose time column (optional)" class="flex-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2">
@@ -318,7 +317,9 @@ async function callGeminiAPI(payload, maxRetries = 3) {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                // Throw an error that includes the status for better error display
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status} - ${errorText.substring(0, 100)}...`);
             }
 
             const result = await response.json();
@@ -329,6 +330,7 @@ async function callGeminiAPI(payload, maxRetries = 3) {
             }
             // Exponential backoff
             const delay = Math.pow(2, attempt) * 1000;
+            // console.log(`Retry attempt ${attempt + 1} after ${delay}ms...`); // Commented out for no logging rule
             await new Promise(resolve => setTimeout(resolve, delay));
         }
     }
@@ -395,6 +397,7 @@ aiBtn.addEventListener('click', async () => {
 
         if (candidate && candidate.content?.parts?.[0]?.text) {
             const text = candidate.content.parts[0].text;
+            // Use a simple div for markdown rendering, assuming the environment handles it well
             aiOutput.innerHTML = `<div class="prose text-sm max-w-none text-gray-800">${text}</div>`;
             
             // Extract grounding sources
@@ -426,8 +429,16 @@ aiBtn.addEventListener('click', async () => {
         }
 
     } catch (error) {
-        responsePayloadEl.textContent = JSON.stringify({ error: error.message }, null, 2);
-        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">Network Error: Could not connect to the AI service. Details: ${error.message}</div>`;
+        let displayError = error.message;
+
+        if (error.message.includes('HTTP error! status: 403')) {
+            displayError = "Authentication Failed (403 Forbidden). The API key is likely missing or invalid. Please ensure the environment is correctly providing the key.";
+        } else if (error.message.includes('400')) {
+             displayError = "Invalid Request (400 Bad Request). The file or prompt format may be incorrect.";
+        }
+        
+        responsePayloadEl.textContent = JSON.stringify({ error: displayError, originalError: error.message }, null, 2);
+        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">Analysis Failed: ${displayError}</div>`;
         showTempMessage('AI Analysis failed.', 'error');
     }
 });
