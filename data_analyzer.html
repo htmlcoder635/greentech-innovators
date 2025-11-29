@@ -41,8 +41,9 @@
                 
                 <!-- File Input & Column Selectors (Now spanning 8 columns on desktop) -->
                 <div class="col-span-12 md:col-span-8 space-y-4">
-                    <label class="block text-sm font-medium text-gray-700">1. Upload Tabular Data (.csv)</label>
-                    <input id="file-input" type="file" accept=".csv" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition duration-150"/>
+                    <!-- UPDATED LABEL AND ACCEPT ATTRIBUTE -->
+                    <label class="block text-sm font-medium text-gray-700">1. Upload Data (.csv, .xls, .xlsx, .pdf) or Image File (.jpeg, .jpg, .png)</label>
+                    <input id="file-input" type="file" accept=".csv, .xls, .xlsx, .pdf, .jpeg, .jpg, .png" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition duration-150"/>
                     <div class="flex space-x-4">
                         <select id="timecol" title="Choose time column (optional)" class="flex-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2">
                             <option value="">-- Time column (optional) --</option>
@@ -198,6 +199,9 @@ function resetUI(){
     tsWrapper.innerHTML = '<canvas id="timeseries"></canvas>'; // Re-create canvas placeholder
     dataTableBody.innerHTML = '';
     dataTableHeader.innerHTML = '';
+    
+    // Reset parsed data state
+    parsed = { data: [], meta: null, columns: [] };
 }
 
 fileInput.addEventListener('change', () => {
@@ -209,25 +213,37 @@ fileInput.addEventListener('change', () => {
 });
 
 parseBtn.addEventListener('click', () => {
-    if(!fileInput.files.length) return showTempMessage('Choose a CSV file first.', 'error');
-    noData.style.display = 'none';
-    
-    Papa.parse(fileInput.files[0], {
-        header: true,
-        dynamicTyping: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            parsed.data = results.data;
-            parsed.meta = results.meta;
-            parsed.columns = results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {});
-            
-            populateColumnSelectors(parsed.columns);
-            resultArea.style.display = 'block';
-            renderSummaries(parsed);
-            renderDataTable(parsed);
-        },
-        error: function(err){ showTempMessage('CSV parse error: ' + (err.message || err), 'error'); }
-    });
+    if(!fileInput.files.length) return showTempMessage('Choose a file first.', 'error');
+    const file = fileInput.files[0];
+    const fileName = file.name.toLowerCase();
+
+    // Only proceed with PapaParse if the file is a CSV
+    if (fileName.endsWith('.csv')) {
+        noData.style.display = 'none';
+        
+        Papa.parse(file, {
+            header: true,
+            dynamicTyping: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                parsed.data = results.data;
+                parsed.meta = results.meta;
+                parsed.columns = results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {});
+                
+                populateColumnSelectors(parsed.columns);
+                resultArea.style.display = 'block';
+                renderSummaries(parsed);
+                renderDataTable(parsed);
+            },
+            error: function(err){ showTempMessage('CSV parse error: ' + (err.message || err), 'error'); }
+        });
+    } else {
+        // Handle non-CSV files by preventing local parsing and informing the user.
+        resetUI();
+        noData.style.display = 'block';
+        noData.innerHTML = `<svg class="mx-auto h-12 w-12 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><p class="mt-1 font-semibold text-orange-600">Local Parsing Limited.</p><p class="mt-1 text-sm text-gray-500">The local 'Parse & Visualize' function is designed only for CSV files. For files like PDF, Excel, or Images, you must use the 'Analyze with AI' button.</p>`;
+        showTempMessage(`File type detected. Use 'Analyze with AI' for non-CSV files.`, 'info');
+    }
 });
 
 
@@ -275,8 +291,6 @@ function renderSummaries(parsed){
         if(datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
     }
 }
-
-// ... renderDataTable, createStatBox, drawCharts, renderLineChart, renderHistogram functions are unchanged (omitted for brevity)
 
 function renderDataTable(parsed) {
     dataTableHeader.innerHTML = '';
@@ -486,7 +500,18 @@ async function callGeminiAPI(payload, maxRetries = 3) {
 }
 
 aiBtn.addEventListener('click', async () => {
-    if (!parsed.data.length) return showTempMessage('Parse a CSV file first.', 'error');
+    // Check for file presence first
+    if (!fileInput.files.length) return showTempMessage('Choose a file first.', 'error');
+
+    // Currently, the AI analysis relies on pre-parsed CSV data (in `parsed.data`).
+    // If a file is loaded but not parsed (i.e., it's a non-CSV file), we must block the AI call
+    // or provide an error message, as the current implementation is text-only.
+    if (!parsed.data.length) {
+        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">AI Analysis currently supports text-based data summaries only (requires CSV). Please load and parse a CSV file to proceed with AI analysis.</div>`;
+        return showTempMessage('AI currently requires CSV data.', 'error');
+    }
+
+    // If we reach here, we know `parsed.data` is available and came from a CSV.
     
     aiOutput.innerHTML = '<div class="flex items-center space-x-2 text-gray-600"><svg class="animate-spin h-5 w-5 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Analyzing data with Gemini...</span></div>';
     aiSources.classList.add('hidden');
@@ -515,6 +540,7 @@ Focus your analysis on the statistical measures and how the sample data might re
         systemInstruction: { parts: [{ text: systemPrompt }] },
     };
     
+    // Log request payload for debugging
     requestPayloadEl.textContent = JSON.stringify(payload.contents[0].parts[0].text, null, 2).slice(0, 1000) + '...\n\n(Truncated for display)';
 
 
@@ -550,12 +576,13 @@ Focus your analysis on the statistical measures and how the sample data might re
             }
 
         } else {
-            aiOutput.innerHTML = `<div class="text-red-600 font-semibold">AI Error: Failed to generate content. Response was incomplete.</div>`;
+            aiOutput.innerHTML = `<div class="text-red-600 font-semibold">AI Error: Failed to generate content. Response was incomplete. Check the Debug Information panel.</div>`;
         }
 
     } catch (error) {
         responsePayloadEl.textContent = JSON.stringify({ error: error.message }, null, 2);
-        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">Network Error: Could not connect to the AI service after several retries. Check your network connection or the API configuration.</div>`;
+        // This is the error message the user reported, indicating the fetch failed repeatedly.
+        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">Network Error: Could not connect to the AI service after several retries. This is likely an environmental or temporary network issue. Please try again.</div>`;
         showTempMessage('AI Analysis failed.', 'error');
     }
 });
