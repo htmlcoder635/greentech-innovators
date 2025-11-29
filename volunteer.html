@@ -2,11 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Volunteer — GreenTech Innovators</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  
+  <style>
+    /* CSS STYLES */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f9f4;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .site-header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .site-header nav a { color: white; text-decoration: none; margin-left: 15px; font-weight: 500; }
+    main { flex: 1; max-width: 800px; margin: 2rem auto; padding: 0 1rem; width: 100%; }
+    
+    .volunteer-form {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #2e7d32; }
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;
+    }
+    .checkbox-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .checkbox-item label { font-weight: normal; display: inline; color: #333; margin-left: 5px; }
+
+    button[type="submit"] {
+      background-color: #2e7d32; color: white; padding: 0.75rem; border: none; border-radius: 4px;
+      font-size: 1.1rem; cursor: pointer; width: 100%; transition: background 0.3s ease;
+    }
+    button[type="submit"]:hover { background-color: #1b5e20; }
+    button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+    /* Messages */
+    #status-message { margin-top: 1rem; text-align: center; display: none; padding: 10px; border-radius: 4px; }
+    .success { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
+    .error { background-color: #ffebee; color: #c62828; border: 1px solid #c62828; }
+
+    footer { text-align: center; padding: 1rem; background-color: #e8f5e9; margin-top: auto; }
+  </style>
 </head>
 <body>
+
   <header class="site-header">
     <h1>GreenTech Innovators</h1>
     <nav>
@@ -19,16 +72,105 @@
   </header>
 
   <main>
-    <section>
-      <h2>Volunteer</h2>
-      <p>We welcome students, mentors, and volunteers. Email us at <a href="mailto:arnav2907mishra@gmail.com">hello@greentech.org</a> to get started.</p>
-      <p>Typical roles: developer, data researcher, outreach, content creation.</p>
+    <section style="text-align: center; margin-bottom: 2rem;">
+      <h2 style="color: #1b5e20;">Join the Movement</h2>
+      <p>Use your AI skills to fight climate change.</p>
     </section>
+
+    <form class="volunteer-form" name="submit-to-google-sheet">
+      
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required placeholder="Jane Doe" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required placeholder="jane@example.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="role">Primary Role</label>
+        <select id="role" name="role" required>
+          <option value="" disabled selected>Select a role...</option>
+          <option value="AI Engineer">AI Engineer</option>
+          <option value="Data Scientist">Data Scientist</option>
+          <option value="Web Dev">Web Developer</option>
+          <option value="Outreach">Outreach</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Skills</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item"><input type="checkbox" name="skill_opt" value="Python"><label>Python</label></div>
+          <div class="checkbox-item"><input type="checkbox" name="skill_opt" value="TensorFlow"><label>TensorFlow</label></div>
+          <div class="checkbox-item"><input type="checkbox" name="skill_opt" value="GIS"><label>GIS</label></div>
+          <div class="checkbox-item"><input type="checkbox" name="skill_opt" value="React"><label>React</label></div>
+        </div>
+        <input type="hidden" name="skills" id="skills-hidden">
+      </div>
+
+      <div class="form-group">
+        <label for="motivation">Why GreenTech?</label>
+        <textarea id="motivation" name="motivation" rows="3"></textarea>
+      </div>
+
+      <button type="submit" id="submit-btn">Submit Application</button>
+      <div id="status-message"></div>
+    </form>
   </main>
 
   <footer>
-    <p>© <span id="year3"></span> GreenTech Innovators</p>
+    <p>&copy; <span id="year"></span> GreenTech Innovators</p>
   </footer>
-  <script>document.getElementById('year3').innerText = new Date().getFullYear()</script>
+
+  <script>
+    document.getElementById('year').innerText = new Date().getFullYear();
+
+    // 1. PASTE YOUR GOOGLE WEB APP URL HERE
+    const scriptURL = 'YOUR_GOOGLE_WEB_APP_URL_HERE';
+    
+    const form = document.forms['submit-to-google-sheet'];
+    const submitBtn = document.getElementById('submit-btn');
+    const statusMsg = document.getElementById('status-message');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      
+      // UI: Disable button and show loading
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Sending...";
+      statusMsg.style.display = 'none';
+
+      // 2. GATHER CHECKBOXES
+      // Google sheets is simple, so we join all checked boxes into one string (e.g. "Python, React")
+      const checkedSkills = Array.from(document.querySelectorAll('input[name="skill_opt"]:checked'))
+                                 .map(cb => cb.value)
+                                 .join(', ');
+      document.getElementById('skills-hidden').value = checkedSkills;
+
+      // 3. SEND DATA
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          // Success
+          statusMsg.className = 'success';
+          statusMsg.innerText = "Success! Thank you for volunteering.";
+          statusMsg.style.display = 'block';
+          form.reset();
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Submit Application";
+        })
+        .catch(error => {
+          // Error
+          console.error('Error!', error.message);
+          statusMsg.className = 'error';
+          statusMsg.innerText = "Error submitting form. Please check your internet connection.";
+          statusMsg.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Submit Application";
+        });
+    });
+  </script>
 </body>
 </html>
