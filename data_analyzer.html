@@ -6,7 +6,7 @@
     <title>Enhanced Data Analyzer — GreenTech</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load PapaParse for CSV handling -->
+    <!-- Load PapaParse for local CSV handling -->
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <!-- Load Chart.js for visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -32,33 +32,33 @@
     </header>
 
     <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-        <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Climate Data Analysis Hub</h2>
-        <p class="text-base text-gray-500 mb-6">Upload a CSV file. The tool will parse and visualize key statistics locally.</p>
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Multimodal Analysis Hub</h2>
+        <p class="text-base text-gray-500 mb-6">Upload any file type (data or image) and use AI to analyze its content.</p>
 
         <!-- Uploader & Controls Card -->
         <div class="bg-white shadow-xl rounded-xl p-6 mb-8 border border-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
                 
-                <!-- File Input & Column Selectors (Now spanning 8 columns on desktop) -->
+                <!-- File Input & Column Selectors -->
                 <div class="col-span-12 md:col-span-8 space-y-4">
-                    <!-- UPDATED LABEL AND ACCEPT ATTRIBUTE -->
-                    <label class="block text-sm font-medium text-gray-700">1. Upload Data (.csv, .xls, .xlsx, .pdf) or Image File (.jpeg, .jpg, .png)</label>
-                    <input id="file-input" type="file" accept=".csv, .xls, .xlsx, .pdf, .jpeg, .jpg, .png" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition duration-150"/>
+                    <label class="block text-sm font-medium text-gray-700">1. Upload File (CSV, XLS, PDF, JPEG, PNG)</label>
+                    <!-- Updated accept attribute for all requested files -->
+                    <input id="file-input" type="file" accept=".csv,.xls,.xlsx,.pdf,.jpeg,.jpg,.png" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition duration-150"/>
                     <div class="flex space-x-4">
                         <select id="timecol" title="Choose time column (optional)" class="flex-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2">
-                            <option value="">-- Time column (optional) --</option>
+                            <option value="">-- Time column (CSV only) --</option>
                         </select>
                         <select id="datacol" title="Choose data column to visualize" class="flex-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2">
-                            <option value="">-- Data column --</option>
+                            <option value="">-- Data column (CSV only) --</option>
                         </select>
                     </div>
                 </div>
                 
-                <!-- Action Buttons (Now spanning 4 columns on desktop) -->
+                <!-- Action Buttons -->
                 <div class="col-span-12 md:col-span-4 space-y-3">
-                    <button class="w-full inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-2 text-sm font-semibold text-white shadow-md hover:bg-blue-700 transition" id="parse-btn">Parse & Visualize</button>
-                    <!-- Updated button text to reflect AI functionality -->
-                    <button class="w-full inline-flex justify-center rounded-lg border border-transparent bg-yellow-600 py-2 text-sm font-semibold text-white shadow-md hover:bg-yellow-700 transition" id="ai-btn">Analyze with AI</button>
+                    <button class="w-full inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-2 text-sm font-semibold text-white shadow-md hover:bg-blue-700 transition" id="parse-btn" title="Local charts only work with CSV files.">Parse & Visualize (CSV Only)</button>
+                    <!-- This button now sends the file (any type) to the multimodal AI -->
+                    <button class="w-full inline-flex justify-center rounded-lg border border-transparent bg-yellow-600 py-2 text-sm font-semibold text-white shadow-md hover:bg-yellow-700 transition" id="ai-btn">Analyze File with AI</button>
                     <a class="text-sm font-medium text-emerald-600 hover:text-emerald-800 transition block text-center mt-2" id="download-report" style="display:none">Download Report</a>
                 </div>
             </div>
@@ -75,16 +75,16 @@
         <!-- Results Area -->
         <div id="result-area" class="space-y-8" style="display:none">
             
-            <!-- Summary Statistics -->
-            <div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">Key Statistics Summary</h3>
+            <!-- Summary Statistics (Visible only if CSV is loaded) -->
+            <div id="csv-stats">
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Key Statistics Summary (Local CSV Parsing)</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="summary">
                     <!-- Stat Boxes will be injected here -->
                 </div>
             </div>
 
-            <!-- Visualizations (Time Series & Distribution) -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Visualizations (Time Series & Distribution) (Visible only if CSV is loaded) -->
+            <div id="csv-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="bg-white shadow-lg rounded-xl p-5 border border-gray-100">
                     <h4 class="text-lg font-medium text-gray-900 mb-3">Time Series (Selected Column)</h4>
                     <div id="ts-wrapper" class="h-64">
@@ -99,8 +99,8 @@
                 </div>
             </div>
 
-            <!-- Parsed Data Table -->
-            <div class="bg-white shadow-lg rounded-xl p-5 border border-gray-100">
+            <!-- Parsed Data Table (Visible only if CSV is loaded) -->
+            <div id="csv-table" class="bg-white shadow-lg rounded-xl p-5 border border-gray-100">
                 <h4 class="text-lg font-medium text-gray-900 mb-3">Parsed Data Sample (First 50 Rows)</h4>
                 <div class="overflow-x-auto max-h-80" id="data-table-container">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -120,7 +120,7 @@
                 <div class="flex flex-col sm:flex-row gap-6 items-start">
                     <div class="flex-1">
                         <div id="ai-output" class="text-sm text-emerald-700 min-h-[5rem] bg-emerald-50 p-4 rounded-lg border border-emerald-200 shadow-inner">
-                            Click 'Analyze with AI' to send a sample of the data and statistics for advanced interpretation.
+                            Click 'Analyze File with AI' to send the document/image for advanced interpretation.
                         </div>
                     </div>
                 </div>
@@ -130,7 +130,7 @@
                 </div>
             </div>
 
-            <!-- Debug / Payload Panel (Re-added for API calls) -->
+            <!-- Debug / Payload Panel -->
             <div class="bg-white shadow-lg rounded-xl p-5 border border-gray-100">
                 <h4 class="text-lg font-medium text-gray-900 mb-3">Debug Information (API Details)</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -159,7 +159,7 @@ let parsed = { data: [], meta: null, columns: [] };
 let chartStore = {}; 
 
 // Gemini API Configuration
-const API_KEY = "";
+const API_KEY = ""; // Leave as-is
 const API_MODEL = "gemini-2.5-flash-preview-09-2025";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${API_KEY}`;
 
@@ -180,15 +180,25 @@ const dataTableBody = document.getElementById('data-table-body');
 const dataTableHeader = document.getElementById('data-table-header');
 const requestPayloadEl = document.getElementById('request-payload');
 const responsePayloadEl = document.getElementById('response-payload');
+const csvStats = document.getElementById('csv-stats');
+const csvCharts = document.getElementById('csv-charts');
+const csvTable = document.getElementById('csv-table');
 
 
 /* ---- CORE DATA PARSING & UI RESET ---- */
-function resetUI(){
-    summaryEl.innerHTML = '';
-    aiOutput.innerHTML = 'Click \'Analyze with AI\' to send a sample of the data and statistics for advanced interpretation.';
+function resetUI(keepFileMessage = false){
+    // Reset AI output
+    aiOutput.innerHTML = 'Click \'Analyze File with AI\' to send the document/image for advanced interpretation.';
     aiSources.classList.add('hidden');
     aiSourceList.innerHTML = '';
-    resultArea.style.display = 'none';
+    
+    // Reset CSV-specific UI elements
+    csvStats.style.display = 'none';
+    csvCharts.style.display = 'none';
+    csvTable.style.display = 'none';
+    summaryEl.innerHTML = '';
+    
+    // Debug panels
     requestPayloadEl.textContent = '{}';
     responsePayloadEl.textContent = '{}';
     
@@ -202,13 +212,28 @@ function resetUI(){
     
     // Reset parsed data state
     parsed = { data: [], meta: null, columns: [] };
+    
+    // Reset status message unless keeping it
+    if (!keepFileMessage) {
+        resultArea.style.display = 'none';
+        noData.style.display = 'block';
+        noData.innerHTML = `<svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-4m0 0l-1-1m1 1l1-1m-1 1h6m-3-3v6m0 0l1 1m-1-1l-1 1"/></svg><p class="mt-1">No file loaded. Ready for your data!</p>`;
+    }
 }
 
 fileInput.addEventListener('change', () => {
-    resetUI();
+    resetUI(true); // Keep the file message when a file is selected
     if (fileInput.files.length) {
-        noData.innerHTML = `<svg class="mx-auto h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><p class="mt-1 font-semibold">File loaded: ${fileInput.files[0].name}</p>`;
-        parseBtn.disabled = false;
+        const file = fileInput.files[0];
+        noData.style.display = 'none';
+        resultArea.style.display = 'block';
+        
+        // Show file loaded message in the AI output panel initially
+        aiOutput.innerHTML = `<div class="font-semibold text-emerald-700">File Loaded: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB, Type: ${file.type || getMimeType(file.name)}).</div><div class="mt-2 text-gray-600">Click 'Parse & Visualize (CSV Only)' for local charts, or 'Analyze File with AI' for multimodal interpretation.</div>`;
+
+        // Reset CSV data for new file
+        parsed = { data: [], meta: null, columns: [] };
+        populateColumnSelectors([]); // Clear selectors
     }
 });
 
@@ -219,8 +244,6 @@ parseBtn.addEventListener('click', () => {
 
     // Only proceed with PapaParse if the file is a CSV
     if (fileName.endsWith('.csv')) {
-        noData.style.display = 'none';
-        
         Papa.parse(file, {
             header: true,
             dynamicTyping: true,
@@ -231,27 +254,190 @@ parseBtn.addEventListener('click', () => {
                 parsed.columns = results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {});
                 
                 populateColumnSelectors(parsed.columns);
-                resultArea.style.display = 'block';
+                csvStats.style.display = 'block';
+                csvCharts.style.display = 'grid';
+                csvTable.style.display = 'block';
                 renderSummaries(parsed);
                 renderDataTable(parsed);
+                showTempMessage(`Successfully parsed ${parsed.data.length} rows of CSV data.`, 'success');
             },
             error: function(err){ showTempMessage('CSV parse error: ' + (err.message || err), 'error'); }
         });
     } else {
-        // Handle non-CSV files by preventing local parsing and informing the user.
-        resetUI();
-        noData.style.display = 'block';
-        noData.innerHTML = `<svg class="mx-auto h-12 w-12 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><p class="mt-1 font-semibold text-orange-600">Local Parsing Limited.</p><p class="mt-1 text-sm text-gray-500">The local 'Parse & Visualize' function is designed only for CSV files. For files like PDF, Excel, or Images, you must use the 'Analyze with AI' button.</p>`;
-        showTempMessage(`File type detected. Use 'Analyze with AI' for non-CSV files.`, 'info');
+        // Prevent local parsing for non-CSV files
+        showTempMessage(`Local parsing and charting is only supported for CSV files. Use 'Analyze File with AI' for ${file.name}.`, 'info');
+        // Ensure CSV specific sections are hidden
+        csvStats.style.display = 'none';
+        csvCharts.style.display = 'none';
+        csvTable.style.display = 'none';
+    }
+});
+
+/* ---- AI ANALYSIS (Gemini API Integration) ---- */
+
+/**
+ * Reads a File object and converts it to a Base64 encoded string.
+ * @param {File} file - The file to read.
+ * @returns {Promise<string>} The Base64 data string.
+ */
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            // Data URL format: data:[<mime type>][;charset=<charset>][;base64],<data>
+            // We strip the "data:mime/type;base64," prefix.
+            const base64String = reader.result.split(',')[1];
+            resolve(base64String);
+        };
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+function getMimeType(fileName) {
+    const extension = fileName.split('.').pop().toLowerCase();
+    switch (extension) {
+        case 'csv': return 'text/csv';
+        case 'xls': 
+        case 'xlsx': return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        case 'pdf': return 'application/pdf';
+        case 'jpeg':
+        case 'jpg': return 'image/jpeg';
+        case 'png': return 'image/png';
+        default: return 'application/octet-stream';
+    }
+}
+
+async function callGeminiAPI(payload, maxRetries = 3) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            if (attempt === maxRetries - 1) {
+                throw error;
+            }
+            // Exponential backoff
+            const delay = Math.pow(2, attempt) * 1000;
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+}
+
+aiBtn.addEventListener('click', async () => {
+    if (!fileInput.files.length) return showTempMessage('Please select a file to analyze.', 'error');
+
+    const file = fileInput.files[0];
+    const mimeType = file.type || getMimeType(file.name);
+
+    if (file.size > 20 * 1024 * 1024) { // Check for file size limit (20MB as a safety measure)
+        return showTempMessage(`File size limit exceeded. Max 20MB supported for AI analysis. Your file is ${(file.size / 1024 / 1024).toFixed(2)} MB.`, 'error');
+    }
+    
+    aiOutput.innerHTML = '<div class="flex items-center space-x-2 text-gray-600"><svg class="animate-spin h-5 w-5 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Analyzing file content with Gemini...</span></div>';
+    aiSources.classList.add('hidden');
+    aiSourceList.innerHTML = '';
+    
+    let base64Data;
+    try {
+        base64Data = await fileToBase64(file);
+    } catch(err) {
+        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">File Read Error: Could not read the file into Base64.</div>`;
+        return showTempMessage('Failed to read file.', 'error');
+    }
+
+    const userQuery = "Analyze this file. Identify the content (e.g., image, table, report, etc.), extract key information, and provide a professional, detailed, and clear summary of its content. If it contains data, summarize the statistics and trends. If it contains text, summarize the main points and context.";
+
+    const payload = {
+        contents: [
+            {
+                role: "user",
+                parts: [
+                    { text: userQuery },
+                    {
+                        inlineData: {
+                            mimeType: mimeType,
+                            data: base64Data
+                        }
+                    }
+                ]
+            }
+        ],
+        tools: [{ "google_search": {} }],
+        systemInstruction: { parts: [{ text: "You are an expert data analyst and multimodal interpretation specialist. Your task is to analyze the provided file and provide a professional, detailed, and clear summary of its content. Use markdown formatting." }] },
+    };
+    
+    // Log request payload
+    const debugPayloadText = JSON.stringify(payload, (key, value) => {
+        // Truncate base64 data for logging brevity
+        if (key === 'data' && typeof value === 'string') {
+            return value.substring(0, 100) + '... (data truncated)';
+        }
+        return value;
+    }, 2);
+    requestPayloadEl.textContent = debugPayloadText;
+
+    try {
+        const result = await callGeminiAPI(payload);
+        responsePayloadEl.textContent = JSON.stringify(result, null, 2);
+
+        const candidate = result.candidates?.[0];
+
+        if (candidate && candidate.content?.parts?.[0]?.text) {
+            const text = candidate.content.parts[0].text;
+            aiOutput.innerHTML = `<div class="prose text-sm max-w-none text-gray-800">${text}</div>`;
+            
+            // Extract grounding sources
+            let sources = [];
+            const groundingMetadata = candidate.groundingMetadata;
+            if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                sources = groundingMetadata.groundingAttributions
+                    .map(attribution => ({
+                        uri: attribution.web?.uri,
+                        title: attribution.web?.title,
+                    }))
+                    .filter(source => source.uri && source.title);
+            }
+            
+            if (sources.length > 0) {
+                aiSources.classList.remove('hidden');
+                aiSourceList.innerHTML = ''; // Clear previous sources
+                sources.forEach((s, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="${s.uri}" target="_blank" class="text-blue-600 hover:text-blue-800 transition truncate block" title="${s.title}">${index + 1}. ${s.title}</a>`;
+                    aiSourceList.appendChild(li);
+                });
+            } else {
+                aiSources.classList.add('hidden');
+            }
+
+        } else {
+            aiOutput.innerHTML = `<div class="text-red-600 font-semibold">AI Error: Failed to generate content. Response was incomplete or blocked. Check the Debug Information panel.</div>`;
+        }
+
+    } catch (error) {
+        responsePayloadEl.textContent = JSON.stringify({ error: error.message }, null, 2);
+        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">Network Error: Could not connect to the AI service. Details: ${error.message}</div>`;
+        showTempMessage('AI Analysis failed.', 'error');
     }
 });
 
 
-/* ---- RENDERING FUNCTIONS (Largely Unchanged) ---- */
+/* ---- RENDERING FUNCTIONS (Mainly for CSV local analysis) ---- */
 
 function populateColumnSelectors(cols){
-    timecolSelect.innerHTML = '<option value="">-- Time column (optional) --</option>';
-    datacolSelect.innerHTML = '<option value="">-- Data column --</option>';
+    timecolSelect.innerHTML = '<option value="">-- Time column (CSV only) --</option>';
+    datacolSelect.innerHTML = '<option value="">-- Data column (CSV only) --</option>';
     cols.forEach(c => {
         const o1 = document.createElement('option'); o1.value = c; o1.innerText = c; timecolSelect.appendChild(o1);
         const o2 = document.createElement('option'); o2.value = c; o2.innerText = c; datacolSelect.appendChild(o2);
@@ -263,18 +449,13 @@ function renderSummaries(parsed){
     const n = parsed.data.length;
     const cols = parsed.columns;
 
-    // Total Rows Stat
     summaryEl.appendChild(createStatBox('Total Rows', n.toLocaleString(), 'text-blue-600', 'Total number of records loaded.'));
-    
-    // Total Columns Stat
     summaryEl.appendChild(createStatBox('Columns', cols.length, 'text-purple-600', `Detected columns: ${cols.join(', ').slice(0, 50)}...`));
 
     const numericCols = cols.filter(c => isNumericColumn(parsed.data, c));
     
-    // Numeric Columns Stat
-    summaryEl.appendChild(createStatBox('Numeric Cols', numericCols.length, 'text-green-600', `Numeric columns available for charting: ${numericCols.join(', ')}`));
+    summaryEl.appendChild(createStatBox('Numeric Cols', numericCols.length, 'text-green-600', `Numeric columns available for charting: ${numericCols.length}`));
 
-    // Display Mean of the first numeric column
     if(numericCols.length){
         const col = numericCols[0];
         datacolSelect.value = datacolSelect.value || col;
@@ -286,7 +467,6 @@ function renderSummaries(parsed){
         
         drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
     } else {
-        // if no numeric columns, try to pick any column
         datacolSelect.value = datacolSelect.value || (cols[0] || '');
         if(datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
     }
@@ -312,12 +492,11 @@ function renderDataTable(parsed) {
             const td = document.createElement('td');
             td.className = 'px-3 py-2 whitespace-nowrap text-sm text-gray-700';
             let value = row[col];
-            // Format null/undefined values for display
             if (value === null || value === undefined) {
                 value = '-';
                 td.classList.add('text-gray-400', 'italic');
             } else if (typeof value === 'object') {
-                value = JSON.stringify(value); // Display complex objects as string
+                value = JSON.stringify(value); 
             }
             td.innerText = value;
             tr.appendChild(td);
@@ -345,7 +524,6 @@ timecolSelect.addEventListener('change', () => {
 });
 
 function drawCharts(parsed, dataCol, timeCol){
-    // prepare arrays
     const rows = parsed.data.filter(r => r[dataCol] !== null && r[dataCol] !== undefined && !Number.isNaN(r[dataCol]));
     let labels = [], values = [];
     if(timeCol && parsed.columns.includes(timeCol)) {
@@ -357,11 +535,9 @@ function drawCharts(parsed, dataCol, timeCol){
         values = rows.map(r => r[dataCol]);
     }
 
-    // time series
     const tsCanvas = document.getElementById('timeseries');
     renderLineChart(tsCanvas, labels, values, dataCol);
 
-    // histogram
     const histCanvas = document.getElementById('hist');
     renderHistogram(histCanvas, values);
 }
@@ -452,143 +628,7 @@ function renderHistogram(canvas, values) {
 }
 
 
-/* ---- AI ANALYSIS (Gemini API Integration) ---- */
-
-function getNumericStats(parsed) {
-    const numericCols = parsed.columns.filter(c => isNumericColumn(parsed.data, c));
-    const allStats = {};
-    numericCols.forEach(col => {
-        const values = parsed.data.map(r => r[col]).filter(v => v !== null && v !== undefined && !Number.isNaN(v));
-        const stats = computeStats(values);
-        allStats[col] = {
-            count: values.length,
-            mean: round(stats.mean),
-            median: round(stats.median),
-            stdDev: round(stats.std),
-            min: round(Math.min(...values)),
-            max: round(Math.max(...values))
-        };
-    });
-    return allStats;
-}
-
-async function callGeminiAPI(payload, maxRetries = 3) {
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                // Throw error to trigger retry or final catch
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            return result;
-        } catch (error) {
-            if (attempt === maxRetries - 1) {
-                throw error; // Re-throw the error on the last attempt
-            }
-            // Exponential backoff: wait 2^attempt seconds
-            const delay = Math.pow(2, attempt) * 1000;
-            await new Promise(resolve => setTimeout(resolve, delay));
-        }
-    }
-}
-
-aiBtn.addEventListener('click', async () => {
-    // Check for file presence first
-    if (!fileInput.files.length) return showTempMessage('Choose a file first.', 'error');
-
-    // Currently, the AI analysis relies on pre-parsed CSV data (in `parsed.data`).
-    // If a file is loaded but not parsed (i.e., it's a non-CSV file), we must block the AI call
-    // or provide an error message, as the current implementation is text-only.
-    if (!parsed.data.length) {
-        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">AI Analysis currently supports text-based data summaries only (requires CSV). Please load and parse a CSV file to proceed with AI analysis.</div>`;
-        return showTempMessage('AI currently requires CSV data.', 'error');
-    }
-
-    // If we reach here, we know `parsed.data` is available and came from a CSV.
-    
-    aiOutput.innerHTML = '<div class="flex items-center space-x-2 text-gray-600"><svg class="animate-spin h-5 w-5 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Analyzing data with Gemini...</span></div>';
-    aiSources.classList.add('hidden');
-    aiSourceList.innerHTML = '';
-    
-    const sampleSize = 10;
-    const sampleData = parsed.data.slice(0, sampleSize);
-    const allStats = getNumericStats(parsed);
-
-    const dataSummary = {
-        totalRows: parsed.data.length,
-        columns: parsed.columns.join(', '),
-        stats: allStats,
-        sample: sampleData
-    };
-    
-    const systemPrompt = "You are an expert environmental data scientist. Analyze the provided structured data (CSV sample and statistics). Identify key trends, anomalies (outliers), and correlations based on the numeric statistics and the sample data. Provide a concise, professional summary formatted using Markdown. DO NOT use code blocks or quotes to enclose the final output.";
-
-    const userQuery = `Analyze this environmental dataset.
-Data Overview: ${JSON.stringify(dataSummary)}
-Focus your analysis on the statistical measures and how the sample data might reflect those measures. If a time column is present, mention any observed time-based trends.`;
-
-    const payload = {
-        contents: [{ parts: [{ text: userQuery }] }],
-        tools: [{ "google_search": {} }],
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-    };
-    
-    // Log request payload for debugging
-    requestPayloadEl.textContent = JSON.stringify(payload.contents[0].parts[0].text, null, 2).slice(0, 1000) + '...\n\n(Truncated for display)';
-
-
-    try {
-        const result = await callGeminiAPI(payload);
-        responsePayloadEl.textContent = JSON.stringify(result, null, 2);
-
-        const candidate = result.candidates?.[0];
-
-        if (candidate && candidate.content?.parts?.[0]?.text) {
-            const text = candidate.content.parts[0].text;
-            aiOutput.innerHTML = `<div class="prose text-sm max-w-none text-gray-800">${text}</div>`;
-            
-            // Extract grounding sources
-            let sources = [];
-            const groundingMetadata = candidate.groundingMetadata;
-            if (groundingMetadata && groundingMetadata.groundingAttributions) {
-                sources = groundingMetadata.groundingAttributions
-                    .map(attribution => ({
-                        uri: attribution.web?.uri,
-                        title: attribution.web?.title,
-                    }))
-                    .filter(source => source.uri && source.title);
-            }
-            
-            if (sources.length > 0) {
-                aiSources.classList.remove('hidden');
-                sources.forEach((s, index) => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="${s.uri}" target="_blank" class="text-blue-600 hover:text-blue-800 transition truncate block" title="${s.title}">${index + 1}. ${s.title}</a>`;
-                    aiSourceList.appendChild(li);
-                });
-            }
-
-        } else {
-            aiOutput.innerHTML = `<div class="text-red-600 font-semibold">AI Error: Failed to generate content. Response was incomplete. Check the Debug Information panel.</div>`;
-        }
-
-    } catch (error) {
-        responsePayloadEl.textContent = JSON.stringify({ error: error.message }, null, 2);
-        // This is the error message the user reported, indicating the fetch failed repeatedly.
-        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">Network Error: Could not connect to the AI service after several retries. This is likely an environmental or temporary network issue. Please try again.</div>`;
-        showTempMessage('AI Analysis failed.', 'error');
-    }
-});
-
-
-/* ---- UTILITY FUNCTIONS (Unchanged) ---- */
+/* ---- UTILITY FUNCTIONS ---- */
 
 function showTempMessage(message, type = 'info') {
     const color = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-blue-500';
@@ -618,7 +658,6 @@ function computeStats(arr) {
     const mean = arr.reduce((a,b)=>a+b,0)/n;
     const sorted = arr.slice().sort((a,b)=>a-b);
     const median = (sorted[Math.floor((n-1)/2)] + sorted[Math.ceil((n-1)/2)])/2;
-    // Use n for population standard deviation if n > 0, otherwise use n-1 for sample standard deviation.
     const std = Math.sqrt(arr.reduce((s,x)=>s + Math.pow(x-mean,2),0)/Math.max(1,n)); 
     return {mean, median, std};
 }
@@ -626,11 +665,8 @@ function round(x) { return Math.round(x*100)/100 }
 
 document.getElementById('year2').innerText = new Date().getFullYear();
 
-// Initial check to show/hide the data area
-if (parsed.data.length === 0) {
-    noData.style.display = 'block';
-    resultArea.style.display = 'none';
-}
+// Initial state
+resetUI();
 </script>
 </body>
 </html>
