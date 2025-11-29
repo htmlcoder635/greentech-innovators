@@ -2,38 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>About — GreenTech Innovators</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Us – GreenTech Innovators</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    .about-hero {
+      background: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+      padding: 120px 20px;
+      color: white;
+      position: relative;
+      text-align: center;
+    }
+    .about-hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.45);
+    }
+    .about-hero h1, .about-hero p { position: relative; z-index: 2; }
+
+    .about-section {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.7;
+      color: #222;
+    }
+
+    .team {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .team-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .team-card h3 { margin-top: 0; color: var(--darkgreen); }
+    .team-card p { margin: 8px 0 0; font-size: 0.95rem; }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <h1>GreenTech Innovators</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="projects.html">Projects</a>
-      <a href="about.html">About</a>
-      <a href="volunteer.html">Volunteer</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
 
-  <main>
-    <section>
-      <h2>About Us</h2>
-      <p>GreenTech Innovators is a student-led nonprofit building AI tools to improve climate literacy and resilience for All students and communities.</p>
-      <h3>Our Values</h3>
-      <ul>
-        <li>Education first</li>
-        <li>Local impact</li>
-        <li>Open data and transparency</li>
-      </ul>
-    </section>
-  </main>
+<header class="site-header">
+  <h1>GreenTech Innovators</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="projects.html">Projects</a>
+    <a href="about.html">About</a>
+    <a href="volunteer.html">Volunteer</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
 
-  <footer>
-    <p>© <span id="year2"></span> GreenTech Innovators</p>
-  </footer>
-  <script>document.getElementById('year2').innerText = new Date().getFullYear()</script>
+<section class="about-hero">
+  <h1>About Us</h1>
+  <p>Empowering students worldwide to use AI for climate impact.</p>
+</section>
+
+<section class="about-section">
+  <h2>Who We Are</h2>
+  <p>
+    GreenTech Innovators is a student-led global initiative dedicated to building accessible, impactful AI tools for understanding and addressing climate change. Our mission is to empower students, educators, and communities around the world to use technology for meaningful environmental action.
+  </p>
+
+  <p>
+    What began as a passion project has grown into a collaborative climate technology hub — where anyone can explore data, run AI-powered climate models, and contribute to open-source climate solutions.
+  </p>
+</section>
+
+<section class="about-section">
+  <h2>Our Founder</h2>
+
+  <div class="team">
+    <div class="team-card">
+      <h3>Arnav Mishra</h3>
+      <p>High School Student, HHS NJ</p>
+      <p>Founder & Lead Developer</p>
+      <p>
+        Arnav is passionate about climate science, AI, and building tools that help students worldwide understand environmental change. He created GreenTech Innovators to make climate technology accessible to everyone.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© <span id="year"></span> GreenTech Innovators</p>
+</footer>
+
+<script>
+  document.getElementById('year').innerText = new Date().getFullYear();
+</script>
+
 </body>
 </html>
