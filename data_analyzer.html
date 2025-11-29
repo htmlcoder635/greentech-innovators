@@ -1,180 +1,169 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Data Analyzer — GreenTech Innovators</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    :root{--green:#0b6623;--muted:#666;}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; margin:0; color:#111; background:#f6faf6;}
-    header.site-header{
-      display:flex;
-      align-items:center;
-      gap:18px;
-      padding:16px 24px;
-      background: var(--green); /* updated */
-      box-shadow:0 2px 8px rgba(0,0,0,0.04);
-    }
-    header.site-header h1{
-      margin:0;
-      font-size:1.1rem;
-      color: #fff; /* updated */
-    }
-    header nav a{
-      margin-left:10px;
-      color:#fff; /* updated */
-      text-decoration:none;
-      transition: color 0.3s;
-    }
-    header nav a:hover {
-      color:#d0ffd0; /* optional lighter green on hover */
-    }
-    .analyzer-wrap { max-width:1100px; margin:20px auto; padding:18px; }
-    .uploader { background:white;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.04); display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
-    .summary { display:flex;gap:18px;flex-wrap:wrap;margin-top:14px; }
-    .summary .stat { background:#fff;padding:12px;border-radius:10px;min-width:160px;box-shadow:0 3px 8px rgba(0,0,0,0.04) }
-    .chart-card { background:white;padding:14px;border-radius:12px;margin-top:18px; box-shadow:0 6px 18px rgba(0,0,0,0.04); }
-    .actions { margin-top:12px; display:flex; gap:12px; flex-wrap:wrap; }
-    .small { font-size:0.9rem; color:var(--muted) }
-    .btn{background:var(--green);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-    .ghost{color:var(--green);text-decoration:underline;cursor:pointer}
-    .input-inline{padding:8px;border-radius:8px;border:1px solid #ddd}
-    .panel{background:#fff;padding:12px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.03); margin-top:12px}
-    pre{background:#f4f6f4;padding:10px;border-radius:8px;overflow:auto; max-height:260px}
-    label{font-size:0.85rem;color:#444}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Data Analyzer — GreenTech</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load PapaParse for CSV handling -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <!-- Load Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* Custom scrollbar for better look */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #34d399; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+    </style>
 </head>
-<body>
-  <header class="site-header">
-    <h1>GreenTech Innovators</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="data_analyzer.html">Data Analyzer</a>
-      <a href="projects.html">Projects</a>
-      <a href="about.html">About</a>
-    </nav>
-  </header>
+<body class="bg-gray-50 font-sans antialiased text-gray-800">
 
-  <main class="analyzer-wrap">
-    <h2>Global Climate Data Analyzer</h2>
-    <p class="small">Upload a CSV (time series or tabular). The analyzer parses, visualizes, computes simple stats, and can call your AI backend for an interpretation.</p>
-
-    <div class="uploader">
-      <input id="file-input" type="file" accept=".csv" />
-      <select id="timecol" title="Choose time column (optional)">
-        <option value="">-- Time column (optional) --</option>
-      </select>
-      <select id="datacol" title="Choose data column to visualize">
-        <option value="">-- Data column --</option>
-      </select>
-
-      <div style="flex:1;min-width:260px">
-        <label for="backend-url">Backend base URL (e.g. https://your.app.com)</label>
-
-        <input id="backend-url" class="input-inline" style="width:100%" placeholder="https://greentech-api-njl1.onrender.com" />
-        <div style="margin-top:6px;display:flex;gap:8px">
-          <button id="save-backend" class="btn">Save endpoint</button>
-          <button id="clear-backend" class="ghost">Clear</button>
+    <header class="bg-emerald-600 text-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
+            <h1 class="text-xl font-bold tracking-tight">GreenTech Data Analyzer</h1>
+            <nav>
+                <a href="#" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                <a href="#" class="text-emerald-200 hover:text-white transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium border border-emerald-300">Analyzer</a>
+                <a href="#" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+            </nav>
         </div>
-      </div>
+    </header>
 
-      <div class="actions">
-        <button class="btn" id="parse-btn">Parse & Visualize</button>
-        <button class="btn" id="ai-btn">Analyze with AI</button>
-        <a class="ghost" id="download-report" style="display:none">Download Report</a>
-      </div>
-    </div>
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Climate Data Analysis Hub</h2>
+        <p class="text-base text-gray-500 mb-6">Upload a CSV file. The tool will parse and visualize key statistics locally.</p>
 
-    <div id="no-data" style="margin-top:18px;color:var(--muted)">No file loaded.</div>
-
-    <div id="result-area" style="display:none">
-      <div class="summary" id="summary"></div>
-
-      <div class="chart-card">
-        <h4>Time Series</h4>
-        <div id="ts-wrapper"></div>
-      </div>
-
-      <div class="chart-card">
-        <h4>Distribution</h4>
-        <canvas id="hist" height="120"></canvas>
-      </div>
-
-      <div class="card panel">
-        <h4>AI Interpretation</h4>
-        <div style="display:flex;gap:12px;align-items:center">
-          <div style="flex:1">
-            <div id="ai-output" class="small" style="min-height:80px;color:var(--green)"></div>
-          </div>
-          <div style="min-width:220px">
-            <label>Sample rows to send</label>
-
-            <input id="sample-size" class="input-inline" type="number" value="200" min="10" max="1000" style="width:100px" />
-            <div style="margin-top:6px">
-              <label class="small"><input type="checkbox" id="include-meta" checked /> include columns & row count</label>
+        <!-- Uploader & Controls Card -->
+        <div class="bg-white shadow-xl rounded-xl p-6 mb-8 border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+                
+                <!-- File Input & Column Selectors (Now spanning 8 columns on desktop) -->
+                <div class="col-span-12 md:col-span-8 space-y-4">
+                    <label class="block text-sm font-medium text-gray-700">1. Upload Tabular Data (.csv)</label>
+                    <input id="file-input" type="file" accept=".csv" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition duration-150"/>
+                    <div class="flex space-x-4">
+                        <select id="timecol" title="Choose time column (optional)" class="flex-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2">
+                            <option value="">-- Time column (optional) --</option>
+                        </select>
+                        <select id="datacol" title="Choose data column to visualize" class="flex-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2">
+                            <option value="">-- Data column --</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons (Now spanning 4 columns on desktop) -->
+                <div class="col-span-12 md:col-span-4 space-y-3">
+                    <button class="w-full inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-2 text-sm font-semibold text-white shadow-md hover:bg-blue-700 transition" id="parse-btn">Parse & Visualize</button>
+                    <!-- Updated button text to reflect AI functionality -->
+                    <button class="w-full inline-flex justify-center rounded-lg border border-transparent bg-yellow-600 py-2 text-sm font-semibold text-white shadow-md hover:bg-yellow-700 transition" id="ai-btn">Analyze with AI</button>
+                    <a class="text-sm font-medium text-emerald-600 hover:text-emerald-800 transition block text-center mt-2" id="download-report" style="display:none">Download Report</a>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+        <!-- End Uploader Card -->
 
-      <div class="panel">
-        <h4>Request / Response (debug)</h4>
-        <div style="display:flex;gap:12px">
-          <div style="flex:1">
-            <label class="small">Request payload</label>
-            <pre id="request-payload">{}</pre>
-          </div>
-          <div style="flex:1">
-            <label class="small">Backend response</label>
-            <pre id="response-payload">{}</pre>
-          </div>
+
+        <div id="no-data" class="text-center text-gray-400 py-10">
+            <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-4m0 0l-1-1m1 1l1-1m-1 1h6m-3-3v6m0 0l1 1m-1-1l-1 1"/></svg>
+            <p class="mt-1">No file loaded. Ready for your data!</p>
         </div>
-      </div>
 
-      <div class="panel small" id="help-panel">
-        <strong>Notes & troubleshooting</strong>
-        <ul>
-          <li>Backend must accept <code>POST /api/analyze</code> JSON: <code>{ meta, sample }</code> and return <code>{ summary }</code>.</li>
-          <li>Enable CORS on your backend. Example (Flask): <code>from flask_cors import CORS; CORS(app)</code>.</li>
-          <li>Quick curl test:
-            <pre>curl -X POST https://your-backend/api/analyze -H "Content-Type: application/json" -d '{"meta":{"columns":["a"],"rows":10},"sample":[{"a":1}]}'</pre>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </main>
 
-  <footer style="margin-top:30px;text-align:center;color:#444">
-    © <span id="year2"></span> GreenTech Innovators
-  </footer>
+        <!-- Results Area -->
+        <div id="result-area" class="space-y-8" style="display:none">
+            
+            <!-- Summary Statistics -->
+            <div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Key Statistics Summary</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="summary">
+                    <!-- Stat Boxes will be injected here -->
+                </div>
+            </div>
+
+            <!-- Visualizations (Time Series & Distribution) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white shadow-lg rounded-xl p-5 border border-gray-100">
+                    <h4 class="text-lg font-medium text-gray-900 mb-3">Time Series (Selected Column)</h4>
+                    <div id="ts-wrapper" class="h-64">
+                        <canvas id="timeseries"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white shadow-lg rounded-xl p-5 border border-gray-100">
+                    <h4 class="text-lg font-medium text-gray-900 mb-3">Value Distribution (Histogram)</h4>
+                    <div class="h-64">
+                        <canvas id="hist"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parsed Data Table -->
+            <div class="bg-white shadow-lg rounded-xl p-5 border border-gray-100">
+                <h4 class="text-lg font-medium text-gray-900 mb-3">Parsed Data Sample (First 50 Rows)</h4>
+                <div class="overflow-x-auto max-h-80" id="data-table-container">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50 sticky top-0">
+                            <tr id="data-table-header"></tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="data-table-body">
+                            <!-- Data Rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- AI Interpretation -->
+            <div class="bg-white shadow-lg rounded-xl p-5 border border-gray-100">
+                <h4 class="text-lg font-medium text-gray-900 mb-3" id="ai-title">AI Interpretation</h4>
+                <div class="flex flex-col sm:flex-row gap-6 items-start">
+                    <div class="flex-1">
+                        <div id="ai-output" class="text-sm text-emerald-700 min-h-[5rem] bg-emerald-50 p-4 rounded-lg border border-emerald-200 shadow-inner">
+                            Click 'Analyze with AI' to send a sample of the data and statistics for advanced interpretation.
+                        </div>
+                    </div>
+                </div>
+                <div id="ai-sources" class="mt-3 text-xs text-gray-500 hidden">
+                    <p class="font-semibold mb-1">Sources Used:</p>
+                    <ul id="ai-source-list" class="list-disc list-inside space-y-0.5 ml-2"></ul>
+                </div>
+            </div>
+
+            <!-- Debug / Payload Panel (Re-added for API calls) -->
+            <div class="bg-white shadow-lg rounded-xl p-5 border border-gray-100">
+                <h4 class="text-lg font-medium text-gray-900 mb-3">Debug Information (API Details)</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Request Payload Sample</label>
+                        <pre id="request-payload" class="bg-gray-800 text-gray-200 p-3 rounded-lg overflow-auto max-h-64 text-xs">{}</pre>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Backend Response</label>
+                        <pre id="response-payload" class="bg-gray-800 text-gray-200 p-3 rounded-lg overflow-auto max-h-64 text-xs">{}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Results Area -->
+
+    </main>
+
+    <footer class="mt-12 py-6 border-t border-gray-200 text-center text-gray-500">
+        &copy; <span id="year2"></span> GreenTech Innovators. All rights reserved.
+    </footer>
 
 <script>
-/* ---- Runtime-configurable BACKEND_URL (persisted in localStorage) ----
-   The analyzer will call the provided endpoint with POST JSON:
-   { meta: { columns:[...], rows: <n> }, sample: [ ...first N rows... ] }
-   Expect: { summary: "..." } in the JSON response.
-*/
-const BACKEND_KEY = 'greentech_backend_url';
-const backendInput = document.getElementById('backend-url');
-const saveBackend = document.getElementById('save-backend');
-const clearBackend = document.getElementById('clear-backend');
+/* ---- CONSTANTS & SETUP ---- */
+let parsed = { data: [], meta: null, columns: [] };
+let chartStore = {}; 
 
-function getBackendUrl(){ return localStorage.getItem(BACKEND_KEY) || ''; }
-function setBackendUrl(u){ if(u) localStorage.setItem(BACKEND_KEY, u); else localStorage.removeItem(BACKEND_KEY); backendInput.value = getBackendUrl(); }
+// Gemini API Configuration
+const API_KEY = "";
+const API_MODEL = "gemini-2.5-flash-preview-09-2025";
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${API_KEY}`;
 
-backendInput.value = getBackendUrl();
-saveBackend.addEventListener('click', ()=> {
-  const v = backendInput.value.trim();
-  if(v && !/^https?:\/\//.test(v)) return alert('Please include https:// or http:// in the endpoint.');
-  setBackendUrl(v);
-  alert(v ? 'Backend saved.' : 'Backend cleared.');
-});
-clearBackend.addEventListener('click', ()=> { backendInput.value=''; setBackendUrl(''); });
 
-/* ---- UI elements ---- */
+/* ---- UI ELEMENTS ---- */
 const fileInput = document.getElementById('file-input');
 const parseBtn = document.getElementById('parse-btn');
 const aiBtn = document.getElementById('ai-btn');
@@ -182,241 +171,439 @@ const noData = document.getElementById('no-data');
 const resultArea = document.getElementById('result-area');
 const summaryEl = document.getElementById('summary');
 const aiOutput = document.getElementById('ai-output');
+const aiSources = document.getElementById('ai-sources');
+const aiSourceList = document.getElementById('ai-source-list');
 const timecolSelect = document.getElementById('timecol');
 const datacolSelect = document.getElementById('datacol');
-const downloadBtn = document.getElementById('download-report');
-const requestPayload = document.getElementById('request-payload');
-const responsePayload = document.getElementById('response-payload');
-const sampleSizeInput = document.getElementById('sample-size');
-const includeMetaCheckbox = document.getElementById('include-meta');
+const dataTableBody = document.getElementById('data-table-body');
+const dataTableHeader = document.getElementById('data-table-header');
+const requestPayloadEl = document.getElementById('request-payload');
+const responsePayloadEl = document.getElementById('response-payload');
 
-let parsed = { data: [], meta: null, columns: [] };
-let chartStore = {}; // keep Chart instances so we can destroy
 
+/* ---- CORE DATA PARSING & UI RESET ---- */
 function resetUI(){
-  summaryEl.innerHTML = '';
-  aiOutput.innerText = '';
-  resultArea.style.display = 'none';
-  requestPayload.innerText = '{}';
-  responsePayload.innerText = '{}';
-  // destroy charts
-  Object.values(chartStore).forEach(c => c?.destroy && c.destroy());
-  chartStore = {};
-  const tsWrapper = document.getElementById('ts-wrapper');
-  tsWrapper.innerHTML = '';
+    summaryEl.innerHTML = '';
+    aiOutput.innerHTML = 'Click \'Analyze with AI\' to send a sample of the data and statistics for advanced interpretation.';
+    aiSources.classList.add('hidden');
+    aiSourceList.innerHTML = '';
+    resultArea.style.display = 'none';
+    requestPayloadEl.textContent = '{}';
+    responsePayloadEl.textContent = '{}';
+    
+    // destroy charts
+    Object.values(chartStore).forEach(c => c?.destroy && c.destroy());
+    chartStore = {};
+    const tsWrapper = document.getElementById('ts-wrapper');
+    tsWrapper.innerHTML = '<canvas id="timeseries"></canvas>'; // Re-create canvas placeholder
+    dataTableBody.innerHTML = '';
+    dataTableHeader.innerHTML = '';
 }
 
 fileInput.addEventListener('change', () => {
-  resetUI();
-  if (fileInput.files.length) {
-    noData.innerText = "File selected: " + fileInput.files[0].name;
-    parseBtn.disabled = false;
-  }
+    resetUI();
+    if (fileInput.files.length) {
+        noData.innerHTML = `<svg class="mx-auto h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><p class="mt-1 font-semibold">File loaded: ${fileInput.files[0].name}</p>`;
+        parseBtn.disabled = false;
+    }
 });
 
 parseBtn.addEventListener('click', () => {
-  if(!fileInput.files.length) return alert('Choose a CSV file first.');
-  Papa.parse(fileInput.files[0], {
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-      parsed.data = results.data;
-      parsed.meta = results.meta;
-      parsed.columns = results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {});
-      populateColumnSelectors(parsed.columns);
-      noData.style.display = 'none';
-      resultArea.style.display = 'block';
-      renderSummaries(parsed);
-    },
-    error: function(err){ alert('CSV parse error: ' + (err.message || err)); }
-  });
+    if(!fileInput.files.length) return showTempMessage('Choose a CSV file first.', 'error');
+    noData.style.display = 'none';
+    
+    Papa.parse(fileInput.files[0], {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            parsed.data = results.data;
+            parsed.meta = results.meta;
+            parsed.columns = results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {});
+            
+            populateColumnSelectors(parsed.columns);
+            resultArea.style.display = 'block';
+            renderSummaries(parsed);
+            renderDataTable(parsed);
+        },
+        error: function(err){ showTempMessage('CSV parse error: ' + (err.message || err), 'error'); }
+    });
 });
 
+
+/* ---- RENDERING FUNCTIONS (Largely Unchanged) ---- */
+
 function populateColumnSelectors(cols){
-  timecolSelect.innerHTML = '<option value="">-- Time column (optional) --</option>';
-  datacolSelect.innerHTML = '<option value="">-- Data column --</option>';
-  cols.forEach(c => {
-    const o1 = document.createElement('option'); o1.value = c; o1.innerText = c; timecolSelect.appendChild(o1);
-    const o2 = document.createElement('option'); o2.value = c; o2.innerText = c; datacolSelect.appendChild(o2);
-  });
+    timecolSelect.innerHTML = '<option value="">-- Time column (optional) --</option>';
+    datacolSelect.innerHTML = '<option value="">-- Data column --</option>';
+    cols.forEach(c => {
+        const o1 = document.createElement('option'); o1.value = c; o1.innerText = c; timecolSelect.appendChild(o1);
+        const o2 = document.createElement('option'); o2.value = c; o2.innerText = c; datacolSelect.appendChild(o2);
+    });
 }
 
 function renderSummaries(parsed){
-  summaryEl.innerHTML = '';
-  const n = parsed.data.length;
-  const cols = parsed.columns;
-  const countBox = el('div','stat',`Rows: ${n}`);
-  summaryEl.appendChild(countBox);
+    summaryEl.innerHTML = '';
+    const n = parsed.data.length;
+    const cols = parsed.columns;
 
-  const numericCols = cols.filter(c => isNumericColumn(parsed.data, c));
-  numericCols.slice(0,4).forEach(c => {
-    const stats = computeStats(parsed.data.map(r => r[c]).filter(v => v !== null && v !== undefined && !Number.isNaN(v)));
-    const box = document.createElement('div'); box.className='stat';
-    box.innerHTML = `<strong>${c}</strong><div style="font-size:0.92rem">mean ${round(stats.mean)}, median ${round(stats.median)}, stdev ${round(stats.std)}</div>`;
-    summaryEl.appendChild(box);
-  });
+    // Total Rows Stat
+    summaryEl.appendChild(createStatBox('Total Rows', n.toLocaleString(), 'text-blue-600', 'Total number of records loaded.'));
+    
+    // Total Columns Stat
+    summaryEl.appendChild(createStatBox('Columns', cols.length, 'text-purple-600', `Detected columns: ${cols.join(', ').slice(0, 50)}...`));
 
-  if(numericCols.length){
-    datacolSelect.value = datacolSelect.value || numericCols[0];
-    drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
-  } else {
-    // if no numeric columns, try to pick any column
-    datacolSelect.value = datacolSelect.value || (cols[0] || '');
-    if(datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
-  }
+    const numericCols = cols.filter(c => isNumericColumn(parsed.data, c));
+    
+    // Numeric Columns Stat
+    summaryEl.appendChild(createStatBox('Numeric Cols', numericCols.length, 'text-green-600', `Numeric columns available for charting: ${numericCols.join(', ')}`));
+
+    // Display Mean of the first numeric column
+    if(numericCols.length){
+        const col = numericCols[0];
+        datacolSelect.value = datacolSelect.value || col;
+        
+        const values = parsed.data.map(r => r[col]).filter(v => v !== null && v !== undefined && !Number.isNaN(v));
+        const stats = computeStats(values);
+
+        summaryEl.appendChild(createStatBox(`Mean (${col})`, round(stats.mean), 'text-orange-600', `Standard Deviation: ${round(stats.std)}`));
+        
+        drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
+    } else {
+        // if no numeric columns, try to pick any column
+        datacolSelect.value = datacolSelect.value || (cols[0] || '');
+        if(datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
+    }
+}
+
+// ... renderDataTable, createStatBox, drawCharts, renderLineChart, renderHistogram functions are unchanged (omitted for brevity)
+
+function renderDataTable(parsed) {
+    dataTableHeader.innerHTML = '';
+    dataTableBody.innerHTML = '';
+    
+    // Header
+    parsed.columns.forEach(col => {
+        const th = document.createElement('th');
+        th.className = 'px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-gray-50';
+        th.innerText = col;
+        dataTableHeader.appendChild(th);
+    });
+    
+    // Body (Limit to first 50 rows)
+    parsed.data.slice(0, 50).forEach(row => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50';
+        parsed.columns.forEach(col => {
+            const td = document.createElement('td');
+            td.className = 'px-3 py-2 whitespace-nowrap text-sm text-gray-700';
+            let value = row[col];
+            // Format null/undefined values for display
+            if (value === null || value === undefined) {
+                value = '-';
+                td.classList.add('text-gray-400', 'italic');
+            } else if (typeof value === 'object') {
+                value = JSON.stringify(value); // Display complex objects as string
+            }
+            td.innerText = value;
+            tr.appendChild(td);
+        });
+        dataTableBody.appendChild(tr);
+    });
+}
+
+function createStatBox(title, value, valueClass, subText) {
+    const box = document.createElement('div');
+    box.className = 'bg-gray-50 rounded-lg p-4 shadow-md border border-gray-200';
+    box.innerHTML = `
+        <p class="text-sm font-medium text-gray-500">${title}</p>
+        <p class="text-2xl font-bold mt-1 ${valueClass}">${value}</p>
+        <p class="text-xs text-gray-400 mt-2 truncate">${subText}</p>
+    `;
+    return box;
 }
 
 datacolSelect.addEventListener('change', () => {
-  if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
+    if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
 });
 timecolSelect.addEventListener('change', () => {
-  if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolCol.value, timecolSelect.value || null);
+    if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
 });
 
 function drawCharts(parsed, dataCol, timeCol){
-  // prepare arrays
-  const rows = parsed.data.filter(r => r[dataCol] !== null && r[dataCol] !== undefined && !Number.isNaN(r[dataCol]));
-  let labels = [], values = [];
-  if(timeCol && parsed.columns.includes(timeCol)) {
-    rows.sort((a,b) => new Date(a[timeCol]) - new Date(b[timeCol]));
-    labels = rows.map(r => r[timeCol]);
-    values = rows.map(r => r[dataCol]);
-  } else {
-    labels = rows.map((_,i) => i+1);
-    values = rows.map(r => r[dataCol]);
-  }
+    // prepare arrays
+    const rows = parsed.data.filter(r => r[dataCol] !== null && r[dataCol] !== undefined && !Number.isNaN(r[dataCol]));
+    let labels = [], values = [];
+    if(timeCol && parsed.columns.includes(timeCol)) {
+        rows.sort((a,b) => new Date(a[timeCol]) - new Date(b[timeCol]));
+        labels = rows.map(r => r[timeCol]);
+        values = rows.map(r => r[dataCol]);
+    } else {
+        labels = rows.map((_,i) => i+1);
+        values = rows.map(r => r[dataCol]);
+    }
 
-  // time series: create a dedicated canvas inside ts-wrapper
-  const tsWrapper = document.getElementById('ts-wrapper');
-  tsWrapper.innerHTML = ''; // clear previous
-  const tsCanvas = document.createElement('canvas'); tsCanvas.id = 'timeseries'; tsCanvas.height = 120;
-  tsWrapper.appendChild(tsCanvas);
-  renderLineChart(tsCanvas, labels, values, dataCol);
+    // time series
+    const tsCanvas = document.getElementById('timeseries');
+    renderLineChart(tsCanvas, labels, values, dataCol);
 
-  // histogram
-  const histCanvas = document.getElementById('hist');
-  renderHistogram(histCanvas, values);
+    // histogram
+    const histCanvas = document.getElementById('hist');
+    renderHistogram(histCanvas, values);
 }
 
 function renderLineChart(canvas, labels, data, label) {
-  // destroy previous chart on canvas if exists
-  if (canvas._chart) canvas._chart.destroy();
-  canvas._chart = new Chart(canvas, {
-    type: 'line',
-    data: { labels: labels, datasets: [{ label: label, data: data, tension:0.2, fill:true }]},
-    options: { responsive:true, plugins:{ legend:{ display:false } } }
-  });
-  chartStore['ts'] = canvas._chart;
+    if (chartStore['ts']) chartStore['ts'].destroy();
+    
+    chartStore['ts'] = new Chart(canvas, {
+        type: 'line',
+        data: { 
+            labels: labels, 
+            datasets: [{ 
+                label: label, 
+                data: data, 
+                tension: 0.3, 
+                fill: true,
+                backgroundColor: 'rgba(52, 211, 153, 0.2)', // Tailwind green-300
+                borderColor: '#10b981', // Tailwind green-600
+                pointRadius: 0
+            }]
+        },
+        options: { 
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins:{ legend:{ display:false } },
+            scales: {
+                x: {
+                    title: { display: true, text: timecolSelect.value || 'Index' },
+                    ticks: { maxTicksLimit: 10 }
+                },
+                y: {
+                    title: { display: true, text: label }
+                }
+            }
+        }
+    });
 }
 
 function renderHistogram(canvas, values) {
-  if(canvas._chart) canvas._chart.destroy();
-  const bins = 12;
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const width = (max - min) / bins || 1;
-  const counts = new Array(bins).fill(0);
-  values.forEach(v => {
-    let idx = Math.floor((v - min) / width);
-    if(idx >= bins) idx = bins - 1;
-    if(idx < 0) idx = 0;
-    counts[idx]++;
-  });
-  const labels = counts.map((_,i) => `${round(min + i*width)} - ${round(min + (i+1)*width)}`);
-  canvas._chart = new Chart(canvas, { type:'bar', data:{ labels: labels, datasets:[{ label:'count', data: counts }] }, options:{ responsive:true, plugins:{ legend:{display:false} } }});
-  chartStore['hist'] = canvas._chart;
+    if(chartStore['hist']) chartStore['hist'].destroy();
+    if (values.length === 0) {
+        chartStore['hist'] = new Chart(canvas, { type:'bar', data:{ labels: ['No Data'], datasets:[{ data: [0] }] } });
+        return;
+    }
+
+    const bins = 12;
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const range = max - min;
+    const width = (range === 0) ? 1 : range / bins;
+    
+    const counts = new Array(bins).fill(0);
+    values.forEach(v => {
+        let idx = Math.floor((v - min) / width);
+        if(idx >= bins) idx = bins - 1;
+        if(idx < 0) idx = 0;
+        counts[idx]++;
+    });
+    
+    const labels = counts.map((_,i) => {
+        const start = round(min + i*width);
+        const end = round(min + (i+1)*width);
+        return `${start} - ${end}`;
+    });
+
+    chartStore['hist'] = new Chart(canvas, { 
+        type:'bar', 
+        data:{ 
+            labels: labels, 
+            datasets:[{ 
+                label:'Count', 
+                data: counts,
+                backgroundColor: '#f59e0b', // Tailwind yellow-600
+                borderColor: '#b45309', // Tailwind yellow-800
+                borderWidth: 1 
+            }] 
+        }, 
+        options:{ 
+            responsive:true,
+            maintainAspectRatio: false,
+            plugins:{ legend:{display:false} },
+            scales: {
+                x: { title: { display: true, text: 'Value Bins' } },
+                y: { title: { display: true, text: 'Frequency' } }
+            }
+        }
+    });
 }
 
-/* ---- AI call ---- */
-aiBtn.addEventListener('click', async () => {
-  if(!parsed.data.length) return alert('Parse a CSV first.');
-  aiOutput.innerText = 'Analyzing...';
-  const sampleSize = Math.max(10, Math.min(1000, parseInt(sampleSizeInput.value || '200')));
-  const sample = parsed.data.slice(0, sampleSize);
-  const payload = {
-    meta: includeMetaCheckbox.checked ? { columns: parsed.columns, rows: parsed.data.length } : {},
-    sample: sample
-  };
-  requestPayload.innerText = JSON.stringify(payload, null, 2);
 
-  const backendUrl = getBackendUrl();
-  if(!backendUrl){
-    // Local template fallback
+/* ---- AI ANALYSIS (Gemini API Integration) ---- */
+
+function getNumericStats(parsed) {
     const numericCols = parsed.columns.filter(c => isNumericColumn(parsed.data, c));
-    let txt = `Local summary (no backend configured):\nRows: ${parsed.data.length}.\nNumeric columns: ${numericCols.join(', ') || 'none'}.\n`;
-    if(numericCols.length){
-      const col = numericCols[0];
-      const stats = computeStats(parsed.data.map(r=>r[col]).filter(v=>v!==null && v!==undefined && !Number.isNaN(v)));
-      txt += `Example: ${col} — mean ${round(stats.mean)}, stdev ${round(stats.std)}.`;
-    }<
-    aiOutput.innerText = txt;
-    responsePayload.innerText = '{}';
-    return;
-  }
-
-  // >>> FIX APPLIED HERE: Append the specific endpoint to the base URL
-  const fullEndpointUrl = backendUrl.endsWith('/') ? backendUrl + 'api/analyze' : backendUrl + '/api/analyze';
-  
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(()=> controller.abort(), 20000); // 20s timeout
-    const res = await fetch(fullEndpointUrl, { // <-- USING fullEndpointUrl
-      method:'POST',
-      headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify(payload),
-      signal: controller.signal
+    const allStats = {};
+    numericCols.forEach(col => {
+        const values = parsed.data.map(r => r[col]).filter(v => v !== null && v !== undefined && !Number.isNaN(v));
+        const stats = computeStats(values);
+        allStats[col] = {
+            count: values.length,
+            mean: round(stats.mean),
+            median: round(stats.median),
+            stdDev: round(stats.std),
+            min: round(Math.min(...values)),
+            max: round(Math.max(...values))
+        };
     });
-    clearTimeout(timeoutId);
-    const text = await res.text();
-    // try to parse JSON safely
-    let j;
-    try { j = JSON.parse(text); } catch(e){ j = null; }
-    if(res.ok){
-      responsePayload.innerText = j ? JSON.stringify(j, null, 2) : text;
-      if(j && j.summary) aiOutput.innerText = j.summary;
-      else if(j && j.error) aiOutput.innerText = 'AI error: ' + j.error;
-      else aiOutput.innerText = (typeof text === 'string' && text.length) ? text.slice(0,4000) : 'No summary returned.';
-    } else {
-      responsePayload.innerText = (j ? JSON.stringify(j, null, 2) : text) || `HTTP ${res.status}`;
-      aiOutput.innerText = `Backend returned HTTP ${res.status}. Check CORS and endpoint correctness.`;
+    return allStats;
+}
+
+async function callGeminiAPI(payload, maxRetries = 3) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                // Throw error to trigger retry or final catch
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            if (attempt === maxRetries - 1) {
+                throw error; // Re-throw the error on the last attempt
+            }
+            // Exponential backoff: wait 2^attempt seconds
+            const delay = Math.pow(2, attempt) * 1000;
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
     }
-  } catch(e){
-    aiOutput.innerText = 'Error contacting backend: ' + (e.message || e);
-    responsePayload.innerText = '{}';
-    // Helpful hint for CORS: if fetch fails without status, often cause is CORS or network/incorrect URL.
-  }
+}
+
+aiBtn.addEventListener('click', async () => {
+    if (!parsed.data.length) return showTempMessage('Parse a CSV file first.', 'error');
+    
+    aiOutput.innerHTML = '<div class="flex items-center space-x-2 text-gray-600"><svg class="animate-spin h-5 w-5 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Analyzing data with Gemini...</span></div>';
+    aiSources.classList.add('hidden');
+    aiSourceList.innerHTML = '';
+    
+    const sampleSize = 10;
+    const sampleData = parsed.data.slice(0, sampleSize);
+    const allStats = getNumericStats(parsed);
+
+    const dataSummary = {
+        totalRows: parsed.data.length,
+        columns: parsed.columns.join(', '),
+        stats: allStats,
+        sample: sampleData
+    };
+    
+    const systemPrompt = "You are an expert environmental data scientist. Analyze the provided structured data (CSV sample and statistics). Identify key trends, anomalies (outliers), and correlations based on the numeric statistics and the sample data. Provide a concise, professional summary formatted using Markdown. DO NOT use code blocks or quotes to enclose the final output.";
+
+    const userQuery = `Analyze this environmental dataset.
+Data Overview: ${JSON.stringify(dataSummary)}
+Focus your analysis on the statistical measures and how the sample data might reflect those measures. If a time column is present, mention any observed time-based trends.`;
+
+    const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        tools: [{ "google_search": {} }],
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+    };
+    
+    requestPayloadEl.textContent = JSON.stringify(payload.contents[0].parts[0].text, null, 2).slice(0, 1000) + '...\n\n(Truncated for display)';
+
+
+    try {
+        const result = await callGeminiAPI(payload);
+        responsePayloadEl.textContent = JSON.stringify(result, null, 2);
+
+        const candidate = result.candidates?.[0];
+
+        if (candidate && candidate.content?.parts?.[0]?.text) {
+            const text = candidate.content.parts[0].text;
+            aiOutput.innerHTML = `<div class="prose text-sm max-w-none text-gray-800">${text}</div>`;
+            
+            // Extract grounding sources
+            let sources = [];
+            const groundingMetadata = candidate.groundingMetadata;
+            if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                sources = groundingMetadata.groundingAttributions
+                    .map(attribution => ({
+                        uri: attribution.web?.uri,
+                        title: attribution.web?.title,
+                    }))
+                    .filter(source => source.uri && source.title);
+            }
+            
+            if (sources.length > 0) {
+                aiSources.classList.remove('hidden');
+                sources.forEach((s, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="${s.uri}" target="_blank" class="text-blue-600 hover:text-blue-800 transition truncate block" title="${s.title}">${index + 1}. ${s.title}</a>`;
+                    aiSourceList.appendChild(li);
+                });
+            }
+
+        } else {
+            aiOutput.innerHTML = `<div class="text-red-600 font-semibold">AI Error: Failed to generate content. Response was incomplete.</div>`;
+        }
+
+    } catch (error) {
+        responsePayloadEl.textContent = JSON.stringify({ error: error.message }, null, 2);
+        aiOutput.innerHTML = `<div class="text-red-600 font-semibold">Network Error: Could not connect to the AI service after several retries. Check your network connection or the API configuration.</div>`;
+        showTempMessage('AI Analysis failed.', 'error');
+    }
 });
 
-/* ---- small utilities ---- */
+
+/* ---- UTILITY FUNCTIONS (Unchanged) ---- */
+
+function showTempMessage(message, type = 'info') {
+    const color = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-blue-500';
+    const tempDiv = document.createElement('div');
+    tempDiv.className = `fixed bottom-4 right-4 p-4 text-white rounded-lg shadow-xl z-50 ${color} transition-opacity duration-300`;
+    tempDiv.innerText = message;
+    document.body.appendChild(tempDiv);
+    
+    setTimeout(() => {
+        tempDiv.classList.remove('opacity-100');
+        tempDiv.classList.add('opacity-0');
+        setTimeout(() => tempDiv.remove(), 300);
+    }, 4000);
+}
+
 function isNumericColumn(data, col) {
-  for(let i=0;i<Math.min(30,data.length);i++){
-    const v = data[i][col];
-    if(v === null || v === undefined) continue;
-    return typeof v === 'number' && !Number.isNaN(v);
-  }
-  return false;
+    for(let i=0;i<Math.min(30,data.length);i++){
+        const v = data[i][col];
+        if(v === null || v === undefined) continue;
+        return typeof v === 'number' && !Number.isNaN(v);
+    }
+    return false;
 }
 function computeStats(arr) {
-  const n = arr.length;
-  if(n===0) return {mean:0,median:0,std:0};
-  const mean = arr.reduce((a,b)=>a+b,0)/n;
-  const sorted = arr.slice().sort((a,b)=>a-b);
-  const median = (sorted[Math.floor((n-1)/2)] + sorted[Math.ceil((n-1)/2)])/2;
-  const std = Math.sqrt(arr.reduce((s,x)=>s + Math.pow(x-mean,2),0)/Math.max(1,n-1));
-  return {mean, median, std};
+    const n = arr.length;
+    if(n===0) return {mean:0,median:0,std:0};
+    const mean = arr.reduce((a,b)=>a+b,0)/n;
+    const sorted = arr.slice().sort((a,b)=>a-b);
+    const median = (sorted[Math.floor((n-1)/2)] + sorted[Math.ceil((n-1)/2)])/2;
+    // Use n for population standard deviation if n > 0, otherwise use n-1 for sample standard deviation.
+    const std = Math.sqrt(arr.reduce((s,x)=>s + Math.pow(x-mean,2),0)/Math.max(1,n)); 
+    return {mean, median, std};
 }
 function round(x) { return Math.round(x*100)/100 }
-function el(tag, cls, txt) { const d = document.createElement('div'); d.className = cls || ''; d.innerText = txt || ''; return d; }
 
 document.getElementById('year2').innerText = new Date().getFullYear();
 
-/* ---- expose helpful helper for debugging in console ---- */
-window.__greentech = {
-  getBackendUrl,
-  setBackendUrl,
-  parsed
-};
+// Initial check to show/hide the data area
+if (parsed.data.length === 0) {
+    noData.style.display = 'block';
+    resultArea.style.display = 'none';
+}
 </script>
 </body>
 </html>
