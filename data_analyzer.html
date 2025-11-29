@@ -72,7 +72,8 @@
       </select>
 
       <div style="flex:1;min-width:260px">
-        <label for="backend-url">Backend endpoint</label><br>
+        <label for="backend-url">Backend base URL (e.g. https://your.app.com)</label>
+
         <input id="backend-url" class="input-inline" style="width:100%" placeholder="https://greentech-api-njl1.onrender.com" />
         <div style="margin-top:6px;display:flex;gap:8px">
           <button id="save-backend" class="btn">Save endpoint</button>
@@ -109,7 +110,8 @@
             <div id="ai-output" class="small" style="min-height:80px;color:var(--green)"></div>
           </div>
           <div style="min-width:220px">
-            <label>Sample rows to send</label><br>
+            <label>Sample rows to send</label>
+
             <input id="sample-size" class="input-inline" type="number" value="200" min="10" max="1000" style="width:100px" />
             <div style="margin-top:6px">
               <label class="small"><input type="checkbox" id="include-meta" checked /> include columns & row count</label>
@@ -269,7 +271,7 @@ datacolSelect.addEventListener('change', () => {
   if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
 });
 timecolSelect.addEventListener('change', () => {
-  if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
+  if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolCol.value, timecolSelect.value || null);
 });
 
 function drawCharts(parsed, dataCol, timeCol){
@@ -347,16 +349,19 @@ aiBtn.addEventListener('click', async () => {
       const col = numericCols[0];
       const stats = computeStats(parsed.data.map(r=>r[col]).filter(v=>v!==null && v!==undefined && !Number.isNaN(v)));
       txt += `Example: ${col} — mean ${round(stats.mean)}, stdev ${round(stats.std)}.`;
-    }
+    }<
     aiOutput.innerText = txt;
     responsePayload.innerText = '{}';
     return;
   }
 
+  // >>> FIX APPLIED HERE: Append the specific endpoint to the base URL
+  const fullEndpointUrl = backendUrl.endsWith('/') ? backendUrl + 'api/analyze' : backendUrl + '/api/analyze';
+  
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(()=> controller.abort(), 20000); // 20s timeout
-    const res = await fetch(backendUrl, {
+    const res = await fetch(fullEndpointUrl, { // <-- USING fullEndpointUrl
       method:'POST',
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify(payload),
