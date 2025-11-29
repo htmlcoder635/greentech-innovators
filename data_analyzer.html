@@ -5,17 +5,27 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Data Analyzer — GreenTech Innovators</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
-  <!-- PapaParse for CSV parsing and Chart.js for charts -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    .analyzer-wrap { max-width:1100px; margin:20px auto; padding:12px; }
-    .uploader { background:white;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.06); display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+    :root{--green:#0b6623;--muted:#666;}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; margin:0; color:#111; background:#f6faf6;}
+    header.site-header{display:flex;align-items:center;gap:18px;padding:16px 24px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+    header.site-header h1{margin:0;font-size:1.1rem;color:var(--green)}
+    header nav a{margin-left:10px;color:#333;text-decoration:none}
+    .analyzer-wrap { max-width:1100px; margin:20px auto; padding:18px; }
+    .uploader { background:white;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.04); display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
     .summary { display:flex;gap:18px;flex-wrap:wrap;margin-top:14px; }
     .summary .stat { background:#fff;padding:12px;border-radius:10px;min-width:160px;box-shadow:0 3px 8px rgba(0,0,0,0.04) }
     .chart-card { background:white;padding:14px;border-radius:12px;margin-top:18px; box-shadow:0 6px 18px rgba(0,0,0,0.04); }
     .actions { margin-top:12px; display:flex; gap:12px; flex-wrap:wrap; }
-    .small { font-size:0.9rem; color:#555 }
+    .small { font-size:0.9rem; color:var(--muted) }
+    .btn{background:var(--green);color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+    .ghost{color:var(--green);text-decoration:underline;cursor:pointer}
+    .input-inline{padding:8px;border-radius:8px;border:1px solid #ddd}
+    .panel{background:#fff;padding:12px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.03); margin-top:12px}
+    pre{background:#f4f6f4;padding:10px;border-radius:8px;overflow:auto; max-height:260px}
+    label{font-size:0.85rem;color:#444}
   </style>
 </head>
 <body>
@@ -31,7 +41,7 @@
 
   <main class="analyzer-wrap">
     <h2>Global Climate Data Analyzer</h2>
-    <p class="small">Upload a CSV (time series or tabular). The analyzer will parse, visualize, compute simple statistics, and optionally request an AI interpretation.</p>
+    <p class="small">Upload a CSV (time series or tabular). The analyzer parses, visualizes, computes simple stats, and can call your AI backend for an interpretation.</p>
 
     <div class="uploader">
       <input id="file-input" type="file" accept=".csv" />
@@ -41,6 +51,16 @@
       <select id="datacol" title="Choose data column to visualize">
         <option value="">-- Data column --</option>
       </select>
+
+      <div style="flex:1;min-width:260px">
+        <label for="backend-url">Backend endpoint</label><br>
+        <input id="backend-url" class="input-inline" style="width:100%" placeholder="https://your-backend.example.com/api/analyze" />
+        <div style="margin-top:6px;display:flex;gap:8px">
+          <button id="save-backend" class="btn">Save endpoint</button>
+          <button id="clear-backend" class="ghost">Clear</button>
+        </div>
+      </div>
+
       <div class="actions">
         <button class="btn" id="parse-btn">Parse & Visualize</button>
         <button class="btn" id="ai-btn">Analyze with AI</button>
@@ -48,14 +68,14 @@
       </div>
     </div>
 
-    <div id="no-data" style="margin-top:18px;color:#666">No file loaded.</div>
+    <div id="no-data" style="margin-top:18px;color:var(--muted)">No file loaded.</div>
 
     <div id="result-area" style="display:none">
       <div class="summary" id="summary"></div>
 
       <div class="chart-card">
         <h4>Time Series</h4>
-        <canvas id="timeseries" height="120"></canvas>
+        <div id="ts-wrapper"></div>
       </div>
 
       <div class="chart-card">
@@ -63,231 +83,316 @@
         <canvas id="hist" height="120"></canvas>
       </div>
 
-      <div class="card" style="margin-top:16px;">
+      <div class="card panel">
         <h4>AI Interpretation</h4>
-        <div id="ai-output" class="small" style="min-height:80px;color:#0b6623"></div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="flex:1">
+            <div id="ai-output" class="small" style="min-height:80px;color:var(--green)"></div>
+          </div>
+          <div style="min-width:220px">
+            <label>Sample rows to send</label><br>
+            <input id="sample-size" class="input-inline" type="number" value="200" min="10" max="1000" style="width:100px" />
+            <div style="margin-top:6px">
+              <label class="small"><input type="checkbox" id="include-meta" checked /> include columns & row count</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h4>Request / Response (debug)</h4>
+        <div style="display:flex;gap:12px">
+          <div style="flex:1">
+            <label class="small">Request payload</label>
+            <pre id="request-payload">{}</pre>
+          </div>
+          <div style="flex:1">
+            <label class="small">Backend response</label>
+            <pre id="response-payload">{}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel small" id="help-panel">
+        <strong>Notes & troubleshooting</strong>
+        <ul>
+          <li>Backend must accept <code>POST /api/analyze</code> JSON: <code>{ meta, sample }</code> and return <code>{ summary }</code>.</li>
+          <li>Enable CORS on your backend. Example (Flask): <code>from flask_cors import CORS; CORS(app)</code>.</li>
+          <li>Quick curl test:
+            <pre>curl -X POST https://your-backend/api/analyze -H "Content-Type: application/json" -d '{"meta":{"columns":["a"],"rows":10},"sample":[{"a":1}]}'</pre>
+          </li>
+        </ul>
       </div>
     </div>
   </main>
 
-  <footer style="margin-top:30px;">
-    <p style="text-align:center;color:#444">© <span id="year2"></span> GreenTech Innovators</p>
+  <footer style="margin-top:30px;text-align:center;color:#444">
+    © <span id="year2"></span> GreenTech Innovators
   </footer>
 
-  <script>
-  // Config: set BACKEND_URL to your deployed endpoint that accepts POST /api/analyze {rows, columns, meta}
-  // If left blank, AI analysis will be skipped (local summaries still work).
-  const BACKEND_URL = ""; // e.g. "https://greentech-api-njl1.onrender.com/api/analyze"
+<script>
+/* ---- Runtime-configurable BACKEND_URL (persisted in localStorage) ----
+   The analyzer will call the provided endpoint with POST JSON:
+   { meta: { columns:[...], rows: <n> }, sample: [ ...first N rows... ] }
+   Expect: { summary: "..." } in the JSON response.
+*/
+const BACKEND_KEY = 'greentech_backend_url';
+const backendInput = document.getElementById('backend-url');
+const saveBackend = document.getElementById('save-backend');
+const clearBackend = document.getElementById('clear-backend');
 
-  const fileInput = document.getElementById('file-input');
-  const parseBtn = document.getElementById('parse-btn');
-  const aiBtn = document.getElementById('ai-btn');
-  const noData = document.getElementById('no-data');
-  const resultArea = document.getElementById('result-area');
-  const summaryEl = document.getElementById('summary');
-  const aiOutput = document.getElementById('ai-output');
-  const timecolSelect = document.getElementById('timecol');
-  const datacolSelect = document.getElementById('datacol');
-  const downloadBtn = document.getElementById('download-report');
+function getBackendUrl(){ return localStorage.getItem(BACKEND_KEY) || ''; }
+function setBackendUrl(u){ if(u) localStorage.setItem(BACKEND_KEY, u); else localStorage.removeItem(BACKEND_KEY); backendInput.value = getBackendUrl(); }
 
-  let parsed = { data: [], meta: null, columns: [] };
+backendInput.value = getBackendUrl();
+saveBackend.addEventListener('click', ()=> {
+  const v = backendInput.value.trim();
+  if(v && !/^https?:\/\//.test(v)) return alert('Please include https:// or http:// in the endpoint.');
+  setBackendUrl(v);
+  alert(v ? 'Backend saved.' : 'Backend cleared.');
+});
+clearBackend.addEventListener('click', ()=> { backendInput.value=''; setBackendUrl(''); });
 
-  function resetUI() {
-    summaryEl.innerHTML = '';
-    aiOutput.innerText = '';
-    resultArea.style.display = 'none';
-    document.getElementById('timeseries')?.remove && null;
+/* ---- UI elements ---- */
+const fileInput = document.getElementById('file-input');
+const parseBtn = document.getElementById('parse-btn');
+const aiBtn = document.getElementById('ai-btn');
+const noData = document.getElementById('no-data');
+const resultArea = document.getElementById('result-area');
+const summaryEl = document.getElementById('summary');
+const aiOutput = document.getElementById('ai-output');
+const timecolSelect = document.getElementById('timecol');
+const datacolSelect = document.getElementById('datacol');
+const downloadBtn = document.getElementById('download-report');
+const requestPayload = document.getElementById('request-payload');
+const responsePayload = document.getElementById('response-payload');
+const sampleSizeInput = document.getElementById('sample-size');
+const includeMetaCheckbox = document.getElementById('include-meta');
+
+let parsed = { data: [], meta: null, columns: [] };
+let chartStore = {}; // keep Chart instances so we can destroy
+
+function resetUI(){
+  summaryEl.innerHTML = '';
+  aiOutput.innerText = '';
+  resultArea.style.display = 'none';
+  requestPayload.innerText = '{}';
+  responsePayload.innerText = '{}';
+  // destroy charts
+  Object.values(chartStore).forEach(c => c?.destroy && c.destroy());
+  chartStore = {};
+  const tsWrapper = document.getElementById('ts-wrapper');
+  tsWrapper.innerHTML = '';
+}
+
+fileInput.addEventListener('change', () => {
+  resetUI();
+  if (fileInput.files.length) {
+    noData.innerText = "File selected: " + fileInput.files[0].name;
+    parseBtn.disabled = false;
+  }
+});
+
+parseBtn.addEventListener('click', () => {
+  if(!fileInput.files.length) return alert('Choose a CSV file first.');
+  Papa.parse(fileInput.files[0], {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+      parsed.data = results.data;
+      parsed.meta = results.meta;
+      parsed.columns = results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {});
+      populateColumnSelectors(parsed.columns);
+      noData.style.display = 'none';
+      resultArea.style.display = 'block';
+      renderSummaries(parsed);
+    },
+    error: function(err){ alert('CSV parse error: ' + (err.message || err)); }
+  });
+});
+
+function populateColumnSelectors(cols){
+  timecolSelect.innerHTML = '<option value="">-- Time column (optional) --</option>';
+  datacolSelect.innerHTML = '<option value="">-- Data column --</option>';
+  cols.forEach(c => {
+    const o1 = document.createElement('option'); o1.value = c; o1.innerText = c; timecolSelect.appendChild(o1);
+    const o2 = document.createElement('option'); o2.value = c; o2.innerText = c; datacolSelect.appendChild(o2);
+  });
+}
+
+function renderSummaries(parsed){
+  summaryEl.innerHTML = '';
+  const n = parsed.data.length;
+  const cols = parsed.columns;
+  const countBox = el('div','stat',`Rows: ${n}`);
+  summaryEl.appendChild(countBox);
+
+  const numericCols = cols.filter(c => isNumericColumn(parsed.data, c));
+  numericCols.slice(0,4).forEach(c => {
+    const stats = computeStats(parsed.data.map(r => r[c]).filter(v => v !== null && v !== undefined && !Number.isNaN(v)));
+    const box = document.createElement('div'); box.className='stat';
+    box.innerHTML = `<strong>${c}</strong><div style="font-size:0.92rem">mean ${round(stats.mean)}, median ${round(stats.median)}, stdev ${round(stats.std)}</div>`;
+    summaryEl.appendChild(box);
+  });
+
+  if(numericCols.length){
+    datacolSelect.value = datacolSelect.value || numericCols[0];
+    drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
+  } else {
+    // if no numeric columns, try to pick any column
+    datacolSelect.value = datacolSelect.value || (cols[0] || '');
+    if(datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
+  }
+}
+
+datacolSelect.addEventListener('change', () => {
+  if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
+});
+timecolSelect.addEventListener('change', () => {
+  if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
+});
+
+function drawCharts(parsed, dataCol, timeCol){
+  // prepare arrays
+  const rows = parsed.data.filter(r => r[dataCol] !== null && r[dataCol] !== undefined && !Number.isNaN(r[dataCol]));
+  let labels = [], values = [];
+  if(timeCol && parsed.columns.includes(timeCol)) {
+    rows.sort((a,b) => new Date(a[timeCol]) - new Date(b[timeCol]));
+    labels = rows.map(r => r[timeCol]);
+    values = rows.map(r => r[dataCol]);
+  } else {
+    labels = rows.map((_,i) => i+1);
+    values = rows.map(r => r[dataCol]);
   }
 
-  fileInput.addEventListener('change', () => {
-    resetUI();
-    if (fileInput.files.length) {
-      noData.innerText = "File selected: " + fileInput.files[0].name;
-      parseBtn.disabled = false;
+  // time series: create a dedicated canvas inside ts-wrapper
+  const tsWrapper = document.getElementById('ts-wrapper');
+  tsWrapper.innerHTML = ''; // clear previous
+  const tsCanvas = document.createElement('canvas'); tsCanvas.id = 'timeseries'; tsCanvas.height = 120;
+  tsWrapper.appendChild(tsCanvas);
+  renderLineChart(tsCanvas, labels, values, dataCol);
+
+  // histogram
+  const histCanvas = document.getElementById('hist');
+  renderHistogram(histCanvas, values);
+}
+
+function renderLineChart(canvas, labels, data, label) {
+  // destroy previous chart on canvas if exists
+  if (canvas._chart) canvas._chart.destroy();
+  canvas._chart = new Chart(canvas, {
+    type: 'line',
+    data: { labels: labels, datasets: [{ label: label, data: data, tension:0.2, fill:true }]},
+    options: { responsive:true, plugins:{ legend:{ display:false } } }
+  });
+  chartStore['ts'] = canvas._chart;
+}
+
+function renderHistogram(canvas, values) {
+  if(canvas._chart) canvas._chart.destroy();
+  const bins = 12;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const width = (max - min) / bins || 1;
+  const counts = new Array(bins).fill(0);
+  values.forEach(v => {
+    let idx = Math.floor((v - min) / width);
+    if(idx >= bins) idx = bins - 1;
+    if(idx < 0) idx = 0;
+    counts[idx]++;
+  });
+  const labels = counts.map((_,i) => `${round(min + i*width)} - ${round(min + (i+1)*width)}`);
+  canvas._chart = new Chart(canvas, { type:'bar', data:{ labels: labels, datasets:[{ label:'count', data: counts }] }, options:{ responsive:true, plugins:{ legend:{display:false} } }});
+  chartStore['hist'] = canvas._chart;
+}
+
+/* ---- AI call ---- */
+aiBtn.addEventListener('click', async () => {
+  if(!parsed.data.length) return alert('Parse a CSV first.');
+  aiOutput.innerText = 'Analyzing...';
+  const sampleSize = Math.max(10, Math.min(1000, parseInt(sampleSizeInput.value || '200')));
+  const sample = parsed.data.slice(0, sampleSize);
+  const payload = {
+    meta: includeMetaCheckbox.checked ? { columns: parsed.columns, rows: parsed.data.length } : {},
+    sample: sample
+  };
+  requestPayload.innerText = JSON.stringify(payload, null, 2);
+
+  const backendUrl = getBackendUrl();
+  if(!backendUrl){
+    // Local template fallback
+    const numericCols = parsed.columns.filter(c => isNumericColumn(parsed.data, c));
+    let txt = `Local summary (no backend configured):\nRows: ${parsed.data.length}.\nNumeric columns: ${numericCols.join(', ') || 'none'}.\n`;
+    if(numericCols.length){
+      const col = numericCols[0];
+      const stats = computeStats(parsed.data.map(r=>r[col]).filter(v=>v!==null && v!==undefined && !Number.isNaN(v)));
+      txt += `Example: ${col} — mean ${round(stats.mean)}, stdev ${round(stats.std)}.`;
     }
-  });
-
-  parseBtn.addEventListener('click', () => {
-    if(!fileInput.files.length) return alert('Choose a CSV file first.');
-    Papa.parse(fileInput.files[0], {
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: function(results) {
-        parsed.data = results.data;
-        parsed.meta = results.meta;
-        parsed.columns = results.meta.fields || Object.keys(results.data[0] || {});
-        populateColumnSelectors(parsed.columns);
-        noData.style.display = 'none';
-        resultArea.style.display = 'block';
-        renderSummaries(parsed);
-      },
-      error: function(err){ alert('CSV parse error: ' + err.message); }
-    });
-  });
-
-  function populateColumnSelectors(cols) {
-    timecolSelect.innerHTML = '<option value="">-- Time column (optional) --</option>';
-    datacolSelect.innerHTML = '<option value="">-- Data column --</option>';
-    cols.forEach(c => {
-      const o1 = document.createElement('option'); o1.value = c; o1.innerText = c; timecolSelect.appendChild(o1);
-      const o2 = document.createElement('option'); o2.value = c; o2.innerText = c; datacolSelect.appendChild(o2);
-    });
+    aiOutput.innerText = txt;
+    responsePayload.innerText = '{}';
+    return;
   }
 
-  function renderSummaries(parsed) {
-    summaryEl.innerHTML = '';
-    const n = parsed.data.length;
-    const cols = parsed.columns;
-    const countBox = el('div','stat',`Rows: ${n}`);
-    summaryEl.appendChild(countBox);
-
-    // provide numeric column summaries
-    const numericCols = cols.filter(c => isNumericColumn(parsed.data, c));
-    numericCols.slice(0,4).forEach(c => {
-      const stats = computeStats(parsed.data.map(r => r[c]).filter(v => v !== null && v !== undefined && !Number.isNaN(v)));
-      const box = document.createElement('div'); box.className='stat';
-      box.innerHTML = `<strong>${c}</strong><div style="font-size:0.92rem">mean ${round(stats.mean)}, median ${round(stats.median)}, stdev ${round(stats.std)}</div>`;
-      summaryEl.appendChild(box);
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(()=> controller.abort(), 20000); // 20s timeout
+    const res = await fetch(backendUrl, {
+      method:'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
-
-    // draw charts for default column if selected
-    if(numericCols.length) {
-      datacolSelect.value = datacolSelect.value || numericCols[0];
-      drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
-    }
-  }
-
-  datacolSelect.addEventListener('change', () => {
-    if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
-  });
-  timecolSelect.addEventListener('change', () => {
-    if(parsed.data.length && datacolSelect.value) drawCharts(parsed, datacolSelect.value, timecolSelect.value || null);
-  });
-
-  function drawCharts(parsed, dataCol, timeCol) {
-    // prepare arrays
-    const rows = parsed.data.filter(r => r[dataCol] !== null && r[dataCol] !== undefined && !Number.isNaN(r[dataCol]));
-    let labels = [], values = [];
-    if(timeCol && parsed.columns.includes(timeCol)) {
-      rows.sort((a,b) => new Date(a[timeCol]) - new Date(b[timeCol]));
-      labels = rows.map(r => r[timeCol]);
-      values = rows.map(r => r[dataCol]);
+    clearTimeout(timeoutId);
+    const text = await res.text();
+    // try to parse JSON safely
+    let j;
+    try { j = JSON.parse(text); } catch(e){ j = null; }
+    if(res.ok){
+      responsePayload.innerText = j ? JSON.stringify(j, null, 2) : text;
+      if(j && j.summary) aiOutput.innerText = j.summary;
+      else if(j && j.error) aiOutput.innerText = 'AI error: ' + j.error;
+      else aiOutput.innerText = (typeof text === 'string' && text.length) ? text.slice(0,4000) : 'No summary returned.';
     } else {
-      labels = rows.map((_,i) => i+1);
-      values = rows.map(r => r[dataCol]);
+      responsePayload.innerText = (j ? JSON.stringify(j, null, 2) : text) || `HTTP ${res.status}`;
+      aiOutput.innerText = `Backend returned HTTP ${res.status}. Check CORS and endpoint correctness.`;
     }
-
-    // time series
-    const tsCanvas = ensureCanvas('timeseries');
-    renderLineChart(tsCanvas, labels, values, dataCol);
-
-    // histogram
-    const histCanvas = document.getElementById('hist');
-    renderHistogram(histCanvas, values);
+  } catch(e){
+    aiOutput.innerText = 'Error contacting backend: ' + (e.message || e);
+    responsePayload.innerText = '{}';
+    // Helpful hint for CORS: if fetch fails without status, often cause is CORS or network/incorrect URL.
   }
+});
 
-  // helper: create canvas if missing
-  function ensureCanvas(id) {
-    let c = document.getElementById(id);
-    if(!c) {
-      const wrapper = document.querySelector('.chart-card');
-      if(!wrapper) return null;
-      c = document.createElement('canvas'); c.id = id; c.height = 120;
-      wrapper.prepend(c);
-    }
-    return c;
+/* ---- small utilities ---- */
+function isNumericColumn(data, col) {
+  for(let i=0;i<Math.min(30,data.length);i++){
+    const v = data[i][col];
+    if(v === null || v === undefined) continue;
+    return typeof v === 'number' && !Number.isNaN(v);
   }
+  return false;
+}
+function computeStats(arr) {
+  const n = arr.length;
+  if(n===0) return {mean:0,median:0,std:0};
+  const mean = arr.reduce((a,b)=>a+b,0)/n;
+  const sorted = arr.slice().sort((a,b)=>a-b);
+  const median = (sorted[Math.floor((n-1)/2)] + sorted[Math.ceil((n-1)/2)])/2;
+  const std = Math.sqrt(arr.reduce((s,x)=>s + Math.pow(x-mean,2),0)/Math.max(1,n-1));
+  return {mean, median, std};
+}
+function round(x) { return Math.round(x*100)/100 }
+function el(tag, cls, txt) { const d = document.createElement('div'); d.className = cls || ''; d.innerText = txt || ''; return d; }
 
-  function renderLineChart(canvas, labels, data, label) {
-    // destroy previous chart on canvas if exists
-    if(canvas._chart) canvas._chart.destroy();
-    canvas._chart = new Chart(canvas, {
-      type: 'line',
-      data: { labels: labels, datasets: [{ label: label, data: data, tension:0.2, fill:true }]},
-      options: { responsive:true, plugins:{ legend:{ display:false } } }
-    });
-  }
+document.getElementById('year2').innerText = new Date().getFullYear();
 
-  function renderHistogram(canvas, values) {
-    if(canvas._chart) canvas._chart.destroy();
-    // simple bins
-    const bins = 12;
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-    const width = (max - min) / bins || 1;
-    const counts = new Array(bins).fill(0);
-    values.forEach(v => {
-      let idx = Math.floor((v - min) / width);
-      if(idx >= bins) idx = bins - 1;
-      if(idx < 0) idx = 0;
-      counts[idx]++;
-    });
-    const labels = counts.map((_,i) => `${round(min + i*width)} - ${round(min + (i+1)*width)}`);
-    canvas._chart = new Chart(canvas, { type:'bar', data:{ labels: labels, datasets:[{ label:'count', data: counts }] }, options:{ responsive:true, plugins:{ legend:{display:false} } }});
-  }
-
-  aiBtn.addEventListener('click', async () => {
-    if(!parsed.data.length) return alert('Parse a CSV first.');
-    aiOutput.innerText = 'Analyzing...';
-    // create a short JSON summary to send to backend
-    const sample = parsed.data.slice(0,200); // send only first 200 rows to limit size
-    const payload = {
-      meta: { columns: parsed.columns, rows: parsed.data.length },
-      sample: sample
-    };
-
-    if(!BACKEND_URL) {
-      // Simple local AI-like summary (template)
-      const numericCols = parsed.columns.filter(c => isNumericColumn(parsed.data, c));
-      let txt = `Local summary:\nRows: ${parsed.data.length}.\nNumeric columns: ${numericCols.join(', ') || 'none'}.\n`;
-      if(numericCols.length) {
-        const col = numericCols[0];
-        const stats = computeStats(parsed.data.map(r=>r[col]).filter(v=>v!==null && v!==undefined && !Number.isNaN(v)));
-        txt += `Example: ${col} — mean ${round(stats.mean)}, stdev ${round(stats.std)}.`;
-      }
-      aiOutput.innerText = txt;
-      return;
-    }
-
-    try {
-      const res = await fetch(BACKEND_URL, {
-        method:'POST',
-        headers:{ 'Content-Type':'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const j = await res.json();
-      if(j.summary) aiOutput.innerText = j.summary;
-      else if(j.error) aiOutput.innerText = 'AI error: ' + j.error;
-      else aiOutput.innerText = JSON.stringify(j).slice(0,2000);
-    } catch(e) {
-      aiOutput.innerText = 'Error contacting backend: ' + e.message;
-    }
-  });
-
-  // small utilities
-  function isNumericColumn(data, col) {
-    for(let i=0;i<Math.min(30,data.length);i++){
-      const v = data[i][col];
-      if(v === null || v === undefined) continue;
-      return typeof v === 'number' && !Number.isNaN(v);
-    }
-    return false;
-  }
-  function computeStats(arr) {
-    const n = arr.length;
-    if(n===0) return {mean:0,median:0,std:0};
-    const mean = arr.reduce((a,b)=>a+b,0)/n;
-    const sorted = arr.slice().sort((a,b)=>a-b);
-    const median = (sorted[Math.floor((n-1)/2)] + sorted[Math.ceil((n-1)/2)])/2;
-    const std = Math.sqrt(arr.reduce((s,x)=>s + Math.pow(x-mean,2),0)/Math.max(1,n-1));
-    return {mean, median, std};
-  }
-  function round(x) { return Math.round(x*100)/100 }
-
-  function el(tag, cls, txt) { const d = document.createElement('div'); d.className = cls || ''; d.innerText = txt || ''; return d; }
-
-  document.getElementById('year2').innerText = new Date().getFullYear();
-  </script>
+/* ---- expose helpful helper for debugging in console ---- */
+window.__greentech = {
+  getBackendUrl,
+  setBackendUrl,
+  parsed
+};
+</script>
 </body>
 </html>
