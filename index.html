@@ -3,14 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GreenTech Innovators</title>
+  <title>GreenTech Innovators — Global Climate AI Hub</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    /* small homepage-specific tweaks */
+    .hero { padding:110px 20px; }
+    .subhead { color: #0b6623; font-weight:600; margin-top:8px; }
+    .grid-cta { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; padding:28px; }
+    .cta-card { background:linear-gradient(180deg,#fff,#f8fff8); border-radius:12px; padding:18px; box-shadow:0 6px 18px rgba(11,102,35,0.08); text-align:left; }
+    .cta-card h4{ margin:6px 0 8px; color:var(--darkgreen); }
+    .big-cta { display:flex; gap:12px; align-items:center; justify-content:center; margin-top:20px; }
+    .playground-hero { display:flex; gap:20px; align-items:center; justify-content:center; flex-wrap:wrap; margin-top:18px; }
+    .ghost { border:1px dashed rgba(11,102,35,0.18); padding:12px 18px; border-radius:10px; background:transparent; color:var(--darkgreen); text-decoration:none;}
+  </style>
 </head>
 <body>
   <header class="site-header">
     <h1>GreenTech Innovators</h1>
     <nav>
       <a href="index.html">Home</a>
+      <a href="data_analyzer.html">Data Analyzer</a>
       <a href="projects.html">Projects</a>
       <a href="about.html">About</a>
       <a href="volunteer.html">Volunteer</a>
@@ -18,21 +30,60 @@
     </nav>
   </header>
 
-  <main>
-    <section class="hero">
-      <h2>Student-led AI for climate education & action</h2>
-      <p>We build tools that help New Jersey students and communities learn about local climate risks and take measurable action.</p>
-      <a class="btn" href="projects.html">See Projects</a>
-    </section>
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Global Climate AI Hub — Tools for students, by students</h2>
+      <p class="subhead">Upload data, run AI-driven analysis, visualize trends, and generate student-ready reports — anywhere in the world.</p>
+      <div class="big-cta">
+        <a class="cta-btn" href="data_analyzer.html">Try the Data Analyzer</a>
+        <a class="ghost" href="projects.html">See Projects</a>
+      </div>
 
-    <section class="mission">
-      <h3>Our Mission</h3>
-      <p>GreenTech Innovators builds accessible AI tools to improve climate literacy and local resilience in New Jersey.</p>
-    </section>
-  </main>
+      <div class="playground-hero" aria-hidden="false">
+        <div style="min-width:180px; text-align:left;">
+          <strong>Open & collaborative</strong>
+          <div style="font-size:0.95rem;color:#093f1a">Share datasets, notebooks, and models.</div>
+        </div>
+        <div style="min-width:180px; text-align:left;">
+          <strong>Student-friendly</strong>
+          <div style="font-size:0.95rem;color:#093f1a">Guides, project ideas, and step-by-step analysis.</div>
+        </div>
+        <div style="min-width:180px; text-align:left;">
+          <strong>AI-assisted insights</strong>
+          <div style="font-size:0.95rem;color:#093f1a">Summaries, predictions, and recommendations.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="card">
+      <h3>🔎 Data Analyzer</h3>
+      <p>Upload CSVs, visualize patterns, and get immediate AI-assisted summaries (optional backend).</p>
+    </div>
+    <div class="card">
+      <h3>🧠 LLM Climate Tutor</h3>
+      <p>Ask the climate tutor to explain results, write summaries, or help craft project reports.</p>
+    </div>
+    <div class="card">
+      <h3>📚 Project Generator</h3>
+      <p>Get project ideas tailored to your data, grade level, and available equipment.</p>
+    </div>
+  </section>
+
+  <section class="features" style="padding-top:8px;">
+    <div class="card">
+      <h3>Why it matters</h3>
+      <p>Climate data is everywhere — but making sense of it is hard. This hub brings AI and tools to students so they can research, learn, and take action.</p>
+    </div>
+    <div class="card">
+      <h3>Get involved</h3>
+      <p>Volunteer as a mentor, contribute datasets, or help build features. We welcome collaborators from anywhere.</p>
+    </div>
+  </section>
 
   <footer>
-    <p>© <span id="year"></span> GreenTech Innovators</p>
+    <p>© <span id="year"></span> GreenTech Innovators — Global Climate AI Hub</p>
   </footer>
 
   <script>document.getElementById('year').innerText = new Date().getFullYear()</script>
