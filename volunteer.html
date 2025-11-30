@@ -111,27 +111,79 @@
         </section>
         
         
-        <section class="mt-10 p-4 sm:p-8 bg-emerald-50 rounded-xl border border-emerald-300 shadow-lg">
-            <h3 class="text-3xl font-bold text-emerald-800 mb-6 text-center">Ready to Apply?</h3>
-            <p class="text-gray-700 mb-6 max-w-2xl mx-auto text-center">
-                Please fill out this brief application form. Your responses will be recorded in a secure spreadsheet for review by our team.
+        <section class="mt-10 p-4 sm:p-8 bg-emerald-50 rounded-xl border border-emerald-300 shadow-lg max-w-2xl mx-auto">
+            <h3 class="text-3xl font-bold text-emerald-800 mb-6 text-center">Volunteer Application</h3>
+            <p class="text-gray-700 mb-6 text-center">
+                Tell us a little about yourself and your areas of interest.
             </p>
             
-            <div class="relative w-full h-auto" style="min-height: 800px;">
-                <iframe 
-                    src="https://docs.google.com/forms/d/e/1FAIpQLScP7J_rD9Z7W9w0X0R0R0X0R0X0R0X0R0X0R0X0R0X0R0R/viewform?embedded=true" 
-                    class="w-full h-full absolute inset-0 rounded-lg"
-                    frameborder="0" 
-                    marginheight="0" 
-                    marginwidth="0" 
-                    loading="lazy"
-                    title="GreenTech Innovators Volunteer Application">
-                    Loading…
-                </iframe>
+            <form action="https://script.google.com/macros/s/AKfycbyc4L_B4KkX_kKkX_kKkX_kKkX_kKkX_kKkX_kKkX_kKkX_kKkX_kKkX_kKkX_kKkX_kK/exec" method="post" id="volunteer-form" class="space-y-6">
                 
-                <div class="absolute inset-0 bg-white/20 pointer-events-none rounded-lg border border-emerald-300"></div>
-            </div>
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" id="name" name="Full Name" required 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border">
+                </div>
+                
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="email" name="Email" required 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Area of Interest</label>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="Area of Interest" value="Coding/Software Development" required 
+                                   class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                            <span class="ml-2 text-sm text-gray-700">Coding/Software Development</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="Area of Interest" value="Data Analysis/Science" 
+                                   class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                            <span class="ml-2 text-sm text-gray-700">Data Analysis/Science</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="Area of Interest" value="Content/Writing/UX" 
+                                   class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                            <span class="ml-2 text-sm text-gray-700">Content/Writing/UX</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="Area of Interest" value="Citizen Science/Field Work" 
+                                   class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                            <span class="ml-2 text-sm text-gray-700">Citizen Science/Field Work</span>
+                        </label>
+                    </div>
+                </div>
 
+                <div>
+                    <label for="experience" class="block text-sm font-medium text-gray-700">Experience Level</label>
+                    <select id="experience" name="Experience Level" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border bg-white">
+                        <option value="" disabled selected>Select your level</option>
+                        <option value="Beginner/Student">Beginner/Student</option>
+                        <option value="Intermediate">Intermediate (1-3 years experience)</option>
+                        <option value="Advanced">Advanced (3+ years experience)</option>
+                        <option value="Expert">Expert/Professional</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="message" class="block text-sm font-medium text-gray-700">Tell us why you want to join (Skills, availability, etc.)</label>
+                    <textarea id="message" name="Message" rows="4" required
+                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border"></textarea>
+                </div>
+                
+                <div id="form-status" class="hidden p-3 rounded-md text-center text-sm font-medium"></div>
+
+                <div class="pt-4">
+                    <button type="submit" 
+                            class="w-full inline-flex justify-center py-3 border border-transparent rounded-full shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Submit Application
+                    </button>
+                </div>
+            </form>
         </section>
         </main>
 
@@ -152,6 +204,46 @@
         });
         
         document.getElementById('year5').innerText = new Date().getFullYear()
+
+
+        // JavaScript for Form Submission (to keep the data-to-spreadsheet functionality)
+        const form = document.getElementById('volunteer-form');
+        const formStatus = document.getElementById('form-status');
+        const submitButton = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            formStatus.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800');
+            formStatus.classList.add('bg-yellow-100', 'text-yellow-800');
+            formStatus.textContent = 'Submitting application...';
+            submitButton.disabled = true;
+
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // Required for Google Scripts submission to prevent CORS errors
+            })
+            .then(response => {
+                // Since Google Script returns no-cors, we can't check response.ok, 
+                // but if fetch completes successfully, we assume success.
+                formStatus.classList.remove('bg-yellow-100', 'text-yellow-800');
+                formStatus.classList.add('bg-green-100', 'text-green-800');
+                formStatus.textContent = 'Success! Your application has been submitted. We will be in touch soon.';
+                form.reset(); // Clear the form after submission
+            })
+            .catch(error => {
+                // Catch network errors
+                formStatus.classList.remove('bg-yellow-100', 'text-yellow-800');
+                formStatus.classList.add('bg-red-100', 'text-red-800');
+                formStatus.textContent = 'Error submitting form. Please try again or contact us directly.';
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+            });
+        });
     </script>
 </body>
 </html>
