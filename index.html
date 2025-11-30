@@ -3,137 +3,146 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GreenTech Innovators — Global Climate AI Hub</title>
+    <title>GreenTech Innovators — Home</title>
 
+    <link rel="icon" type="image/png" href="assets/greentech-innovators_logo.png" />
+    
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        /* Custom scrollbar copied from Analyzer page (Uses Emerald color) */
+        /* Custom scrollbar copied from Analyzer page (Consistent) */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: #34d399; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #10b981; }
-
-        /* Custom styles for the Hero Section and CTA Grid (Translated from original inline CSS) */
-        .hero { 
-            padding-top: 6rem; /* Equivalent to 110px */
-            padding-bottom: 6rem; /* Equivalent to 110px */
-            /* Tailwind background classes replace the 'hero-overlay' */
-            background-color: #f7fafc; /* Light gray background */
-        }
-        .cta-card { 
-            /* Combining original card style with new Tailwind defaults */
-            background: linear-gradient(180deg, #fff, #f8fff8); 
-            text-align: left;
-            transition: all 0.3s ease;
-        }
-        .cta-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -3px rgba(11, 102, 35, 0.15); /* Stronger shadow on hover */
-        }
     </style>
 </head>
 
 <body class="bg-gray-50 font-sans antialiased text-gray-800">
 
-    <header class="bg-emerald-600 text-white shadow-lg sticky top-0 z-10">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
-            <h1 class="text-xl font-bold tracking-tight">GreenTech Innovators</h1>
-            <nav class="flex space-x-2 sm:space-x-4">
-                <a href="index.html" class="text-emerald-200 hover:text-white transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium border border-emerald-300">Home</a>
-                <a href="data_analyzer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Data Analyzer</a>
-                <a href="projects.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Projects</a>
-                <a href="about.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium hidden md:inline-block">About</a>
-                <a href="volunteer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium hidden md:inline-block">Volunteer</a>
-                <a href="contact.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Contact</a>
-            </nav>
+    <header class="bg-emerald-600 text-white shadow-lg sticky top-0 z-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between py-4">
+                <h1 class="text-xl font-bold tracking-tight">GreenTech Innovators</h1>
+                
+                <button id="menu-button" class="md:hidden p-2 rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-300" aria-label="Toggle menu">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                
+                <nav id="desktop-menu" class="hidden md:flex space-x-2 sm:space-x-4">
+                    <a href="index.html" class="text-emerald-200 hover:text-white transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium border border-emerald-300">Home</a>
+                    <a href="data_analyzer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Data Analyzer</a>
+                    <a href="projects.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                    <a href="about.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">About</a>
+                    <a href="volunteer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium hidden lg:inline-block">Volunteer</a>
+                    <a href="contact.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                </nav>
+            </div>
         </div>
+        
+        <nav id="mobile-menu" class="hidden md:hidden bg-emerald-700 pb-2 transition-all duration-300 ease-in-out">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="block bg-emerald-800 text-emerald-200 rounded-md px-3 py-2 text-base font-medium">Home</a>
+                <a href="data_analyzer.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Data Analyzer</a>
+                <a href="projects.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Projects</a>
+                <a href="about.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">About</a>
+                <a href="volunteer.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Volunteer</a>
+                <a href="contact.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Contact</a>
+            </div>
+        </nav>
     </header>
 
-    <main class="max-w-6xl mx-auto">
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <section class="text-center py-12 md:py-20 bg-emerald-50 rounded-xl shadow-xl border border-emerald-200 mb-10">
+            <h2 class="text-5xl font-extrabold text-emerald-800 tracking-tight sm:text-6xl">
+                Harnessing Innovation for a <span class="text-emerald-600 block">Greener Tomorrow</span>
+            </h2>
+            <p class="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+                GreenTech Innovators is committed to developing open-source solutions and citizen science projects that drive real-world ecological impact.
+            </p>
+            <div class="mt-8 flex justify-center space-x-4">
+                <a href="projects.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 transition duration-150">
+                    Explore Our Projects
+                </a>
+                <a href="volunteer.html" class="inline-flex items-center px-6 py-3 border border-emerald-600 text-base font-medium rounded-full text-emerald-700 bg-white hover:bg-emerald-50 transition duration-150">
+                    Get Involved
+                </a>
+            </div>
+        </section>
+
+        <section class="py-10">
+            <h3 class="text-3xl font-bold text-gray-900 mb-8 text-center">Our Core Initiatives</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transition duration-300 hover:shadow-xl hover:border-emerald-300">
+                    <div class="text-4xl text-emerald-600 mb-3">📈</div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Multimodal Data Analysis</h4>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Use our AI-powered tool to analyze CSV data, images, and reports to quickly extract insights on environmental trends and metrics.
+                    </p>
+                    <a href="data_analyzer.html" class="text-emerald-600 hover:text-emerald-800 font-medium text-sm">
+                        Try the Analyzer &rarr;
+                    </a>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transition duration-300 hover:shadow-xl hover:border-emerald-300">
+                    <div class="text-4xl text-emerald-600 mb-3">🛠️</div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Open Source Development</h4>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Contribute to our active public repositories focusing on air quality monitoring, renewable energy optimization, and biodiversity tracking.
+                    </p>
+                    <a href="projects.html" class="text-emerald-600 hover:text-emerald-800 font-medium text-sm">
+                        View Repositories &rarr;
+                    </a>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transition duration-300 hover:shadow-xl hover:border-emerald-300">
+                    <div class="text-4xl text-emerald-600 mb-3">🤝</div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Citizen Science Movement</h4>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Join our global network of volunteers and researchers to collect data, participate in field studies, and spread environmental awareness.
+                    </p>
+                    <a href="volunteer.html" class="text-emerald-600 hover:text-emerald-800 font-medium text-sm">
+                        Become a Volunteer &rarr;
+                    </a>
+                </div>
+            </div>
+        </section>
         
-        <section class="hero text-center px-4 sm:px-6 lg:px-8">
-            <div class="hero-content max-w-4xl mx-auto">
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
-                    Global Climate AI Hub — Tools for students, by students
-                </h2>
-                <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-                    Upload data, run AI-driven analysis, visualize trends, and generate student-ready reports — anywhere in the world.
-                </p>
-
-                <a class="inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-3 px-8 text-lg font-semibold text-white shadow-xl hover:bg-blue-700 transition duration-200" href="data_analyzer.html">
-                    Try the Data Analyzer
-                </a>
-            </div>
-            
-            <div class="playground-hero flex flex-wrap justify-center gap-6 mt-10">
-                <div class="min-w-[180px] text-left p-3">
-                    <strong class="text-gray-900 text-base">Open & collaborative</strong>
-                    <div class="text-sm text-emerald-800">Share datasets, notebooks, and models.</div>
-                </div>
-                <div class="min-w-[180px] text-left p-3">
-                    <strong class="text-gray-900 text-base">Student-friendly</strong>
-                    <div class="text-sm text-emerald-800">Guides, project ideas, and step-by-step analysis.</div>
-                </div>
-                <div class="min-w-[180px] text-left p-3">
-                    <strong class="text-gray-900 text-base">AI-assisted insights</strong>
-                    <div class="text-sm text-emerald-800">Summaries, predictions, and recommendations.</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
-            
-            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">🔎 Data Analyzer</h3>
-                <p class="text-gray-600 mb-4">Upload CSVs, visualize patterns, and get immediate AI-assisted summaries (optional backend).</p>
-                <a href="data_analyzer.html" class="ghost text-sm font-semibold text-emerald-700 border border-emerald-300 hover:bg-emerald-50 transition self-start mt-2">
-                    Start Analyzing &rarr;
-                </a>
-            </div>
-
-            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">🧠 LLM Climate Tutor</h3>
-                <p class="text-gray-600 mb-4">Ask the climate tutor to explain results, write summaries, or help craft project reports.</p>
-                <a href="#" class="ghost text-sm font-semibold text-emerald-700 border border-emerald-300 hover:bg-emerald-50 transition self-start mt-2">
-                    Access Tutor &rarr;
-                </a>
-            </div>
-
-            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">📚 Project Generator</h3>
-                <p class="text-gray-600 mb-4">Get project ideas tailored to your data, grade level, and available equipment.</p>
-                 <a href="#" class="ghost text-sm font-semibold text-emerald-700 border border-emerald-300 hover:bg-emerald-50 transition self-start mt-2">
-                    Generate Ideas &rarr;
-                </a>
-            </div>
-        </section>
-
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 p-8 pt-0">
-            
-            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Why it matters</h3>
-                <p class="text-gray-600">Climate data is everywhere — but making sense of it is hard. This hub brings AI and tools to students so they can research, learn, and take action.</p>
-            </div>
-
-            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Get involved</h3>
-                <p class="text-gray-600 mb-4">Volunteer as a mentor, contribute datasets, or help build features. We welcome collaborators from anywhere.</p>
-                <a href="volunteer.html" class="inline-flex justify-center rounded-lg border border-transparent bg-yellow-600 py-2 px-4 text-sm font-semibold text-white shadow-md hover:bg-yellow-700 transition mt-4">
-                    Sign Up to Volunteer
-                </a>
-            </div>
+        <section class="mt-10 py-10 bg-gray-100 rounded-xl border border-gray-200 text-center">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Ready to Innovate?</h3>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-6">
+                Whether you're a coder, a scientist, or just passionate about the planet, there's a place for you here.
+            </p>
+            <a href="contact.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition duration-150">
+                Contact Our Team
+            </a>
         </section>
 
     </main>
 
     <footer class="mt-12 py-6 border-t border-gray-200 text-center text-gray-500">
-        &copy; <span id="year"></span> GreenTech Innovators — Global Climate AI Hub
+        &copy; <span id="year1"></span> GreenTech Innovators. All rights reserved.
     </footer>
 
     <script>
-        // Set current year dynamically for the footer
-        document.getElementById('year').innerText = new Date().getFullYear();
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+
+        menuButton.addEventListener('click', () => {
+            const isExpanded = mobileMenu.classList.toggle('hidden');
+            menuIconOpen.classList.toggle('hidden', !isExpanded);
+            menuIconClose.classList.toggle('hidden', isExpanded);
+        });
+
+        document.getElementById('year1').innerText = new Date().getFullYear();
     </script>
 </body>
 </html>
