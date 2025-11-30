@@ -1,92 +1,139 @@
 <!doctype html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/png" href="assets/greentech-innovators_logo.png" />
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GreenTech Innovators — Global Climate AI Hub</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <style>
-    /* small homepage-specific tweaks */
-    .hero { padding:110px 20px; }
-    .subhead { color: #0b6623; font-weight:600; margin-top:8px; }
-    .grid-cta { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; padding:28px; }
-    .cta-card { background:linear-gradient(180deg,#fff,#f8fff8); border-radius:12px; padding:18px; box-shadow:0 6px 18px rgba(11,102,35,0.08); text-align:left; }
-    .cta-card h4{ margin:6px 0 8px; color:var(--darkgreen); }
-    .big-cta { display:flex; gap:12px; align-items:center; justify-content:center; margin-top:20px; }
-    .playground-hero { display:flex; gap:20px; align-items:center; justify-content:center; flex-wrap:wrap; margin-top:18px; }
-    .ghost { border:1px dashed rgba(11,102,35,0.18); padding:12px 18px; border-radius:10px; background:transparent; color:var(--darkgreen); text-decoration:none;}
-  </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenTech Innovators — Global Climate AI Hub</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Custom scrollbar copied from Analyzer page (Uses Emerald color) */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #34d399; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+
+        /* Custom styles for the Hero Section and CTA Grid (Translated from original inline CSS) */
+        .hero { 
+            padding-top: 6rem; /* Equivalent to 110px */
+            padding-bottom: 6rem; /* Equivalent to 110px */
+            /* Tailwind background classes replace the 'hero-overlay' */
+            background-color: #f7fafc; /* Light gray background */
+        }
+        .cta-card { 
+            /* Combining original card style with new Tailwind defaults */
+            background: linear-gradient(180deg, #fff, #f8fff8); 
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+        .cta-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -3px rgba(11, 102, 35, 0.15); /* Stronger shadow on hover */
+        }
+    </style>
 </head>
-<body>
-  <header class="site-header">
-    <h1>GreenTech Innovators</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="data_analyzer.html">Data Analyzer</a>
-      <a href="projects.html">Projects</a>
-      <a href="about.html">About</a>
-      <a href="volunteer.html">Volunteer</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
 
- <section class="hero">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h2>Global Climate AI Hub — Tools for students, by students</h2>
-    <p>Upload data, run AI-driven analysis, visualize trends, and generate student-ready reports — anywhere in the world.</p>
-    <a class="btn" href="data_analyzer.html">Try the Data Analyzer</a>
-  </div>
-   
- </section>
-      <div class="playground-hero" aria-hidden="false">
-        <div style="min-width:180px; text-align:left;">
-          <strong>Open & collaborative</strong>
-          <div style="font-size:0.95rem;color:#093f1a">Share datasets, notebooks, and models.</div>
+<body class="bg-gray-50 font-sans antialiased text-gray-800">
+
+    <header class="bg-emerald-600 text-white shadow-lg sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
+            <h1 class="text-xl font-bold tracking-tight">GreenTech Innovators</h1>
+            <nav class="flex space-x-2 sm:space-x-4">
+                <a href="index.html" class="text-emerald-200 hover:text-white transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium border border-emerald-300">Home</a>
+                <a href="data_analyzer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Data Analyzer</a>
+                <a href="projects.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                <a href="about.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium hidden md:inline-block">About</a>
+                <a href="volunteer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium hidden md:inline-block">Volunteer</a>
+                <a href="contact.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+            </nav>
         </div>
-        <div style="min-width:180px; text-align:left;">
-          <strong>Student-friendly</strong>
-          <div style="font-size:0.95rem;color:#093f1a">Guides, project ideas, and step-by-step analysis.</div>
-        </div>
-        <div style="min-width:180px; text-align:left;">
-          <strong>AI-assisted insights</strong>
-          <div style="font-size:0.95rem;color:#093f1a">Summaries, predictions, and recommendations.</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </header>
 
-  <section class="features">
-    <div class="card">
-      <h3>🔎 Data Analyzer</h3>
-      <p>Upload CSVs, visualize patterns, and get immediate AI-assisted summaries (optional backend).</p>
-    </div>
-    <div class="card">
-      <h3>🧠 LLM Climate Tutor</h3>
-      <p>Ask the climate tutor to explain results, write summaries, or help craft project reports.</p>
-    </div>
-    <div class="card">
-      <h3>📚 Project Generator</h3>
-      <p>Get project ideas tailored to your data, grade level, and available equipment.</p>
-    </div>
-  </section>
+    <main class="max-w-6xl mx-auto">
+        
+        <section class="hero text-center px-4 sm:px-6 lg:px-8">
+            <div class="hero-content max-w-4xl mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+                    Global Climate AI Hub — Tools for students, by students
+                </h2>
+                <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
+                    Upload data, run AI-driven analysis, visualize trends, and generate student-ready reports — anywhere in the world.
+                </p>
 
-  <section class="features" style="padding-top:8px;">
-    <div class="card">
-      <h3>Why it matters</h3>
-      <p>Climate data is everywhere — but making sense of it is hard. This hub brings AI and tools to students so they can research, learn, and take action.</p>
-    </div>
-    <div class="card">
-      <h3>Get involved</h3>
-      <p>Volunteer as a mentor, contribute datasets, or help build features. We welcome collaborators from anywhere.</p>
-    </div>
-  </section>
+                <a class="inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-3 px-8 text-lg font-semibold text-white shadow-xl hover:bg-blue-700 transition duration-200" href="data_analyzer.html">
+                    Try the Data Analyzer
+                </a>
+            </div>
+            
+            <div class="playground-hero flex flex-wrap justify-center gap-6 mt-10">
+                <div class="min-w-[180px] text-left p-3">
+                    <strong class="text-gray-900 text-base">Open & collaborative</strong>
+                    <div class="text-sm text-emerald-800">Share datasets, notebooks, and models.</div>
+                </div>
+                <div class="min-w-[180px] text-left p-3">
+                    <strong class="text-gray-900 text-base">Student-friendly</strong>
+                    <div class="text-sm text-emerald-800">Guides, project ideas, and step-by-step analysis.</div>
+                </div>
+                <div class="min-w-[180px] text-left p-3">
+                    <strong class="text-gray-900 text-base">AI-assisted insights</strong>
+                    <div class="text-sm text-emerald-800">Summaries, predictions, and recommendations.</div>
+                </div>
+            </div>
+        </section>
 
-  <footer>
-    <p>© <span id="year"></span> GreenTech Innovators — Global Climate AI Hub</p>
-  </footer>
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
+            
+            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">🔎 Data Analyzer</h3>
+                <p class="text-gray-600 mb-4">Upload CSVs, visualize patterns, and get immediate AI-assisted summaries (optional backend).</p>
+                <a href="data_analyzer.html" class="ghost text-sm font-semibold text-emerald-700 border border-emerald-300 hover:bg-emerald-50 transition self-start mt-2">
+                    Start Analyzing &rarr;
+                </a>
+            </div>
 
-  <script>document.getElementById('year').innerText = new Date().getFullYear()</script>
+            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">🧠 LLM Climate Tutor</h3>
+                <p class="text-gray-600 mb-4">Ask the climate tutor to explain results, write summaries, or help craft project reports.</p>
+                <a href="#" class="ghost text-sm font-semibold text-emerald-700 border border-emerald-300 hover:bg-emerald-50 transition self-start mt-2">
+                    Access Tutor &rarr;
+                </a>
+            </div>
+
+            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">📚 Project Generator</h3>
+                <p class="text-gray-600 mb-4">Get project ideas tailored to your data, grade level, and available equipment.</p>
+                 <a href="#" class="ghost text-sm font-semibold text-emerald-700 border border-emerald-300 hover:bg-emerald-50 transition self-start mt-2">
+                    Generate Ideas &rarr;
+                </a>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 p-8 pt-0">
+            
+            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Why it matters</h3>
+                <p class="text-gray-600">Climate data is everywhere — but making sense of it is hard. This hub brings AI and tools to students so they can research, learn, and take action.</p>
+            </div>
+
+            <div class="cta-card bg-white shadow-xl rounded-xl p-6 border border-gray-100">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Get involved</h3>
+                <p class="text-gray-600 mb-4">Volunteer as a mentor, contribute datasets, or help build features. We welcome collaborators from anywhere.</p>
+                <a href="volunteer.html" class="inline-flex justify-center rounded-lg border border-transparent bg-yellow-600 py-2 px-4 text-sm font-semibold text-white shadow-md hover:bg-yellow-700 transition mt-4">
+                    Sign Up to Volunteer
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-12 py-6 border-t border-gray-200 text-center text-gray-500">
+        &copy; <span id="year"></span> GreenTech Innovators — Global Climate AI Hub
+    </footer>
+
+    <script>
+        // Set current year dynamically for the footer
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
 </body>
 </html>
