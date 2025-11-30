@@ -1,39 +1,105 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Projects — GreenTech Innovators</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Projects – GreenTech Innovators</title>
+
+    <link rel="icon" type="image/png" href="assets/greentech-innovators_logo.png" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Custom scrollbar copied from Analyzer page (Consistent) */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #34d399; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+    </style>
 </head>
-<body>
-  <header class="site-header">
-    <h1>GreenTech Innovators</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="projects.html">Projects</a>
-      <a href="about.html">About</a>
-      <a href="volunteer.html">Volunteer</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
 
-  <main>
-    <section>
-      <h2>Climate Literacy Chatbot</h2>
-      <p>Ask the chatbot about NJ climate facts, energy-saving tips, and local climate risks.</p>
+<body class="bg-gray-50 font-sans antialiased text-gray-800">
 
-      <div id="chat-container">
-        <div id="messages"></div>
-        <form id="chat-form">
-          <input id="chat-input" type="text" placeholder="Ask about NJ climate, e.g. 'How can my school reduce energy usage?'" autocomplete="off" />
-          <button type="submit">Send</button>
-        </form>
-      </div>
-      <p class="note">Note: This site calls a separate backend for the chatbot. Set BACKEND_URL in assets/js/chatbot.js to your deployed API.</p>
+    <header class="bg-emerald-600 text-white shadow-lg sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
+            <h1 class="text-xl font-bold tracking-tight">GreenTech Innovators</h1>
+            <nav class="flex space-x-2 sm:space-x-4">
+                <a href="index.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                <a href="data_analyzer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Data Analyzer</a>
+                <a href="projects.html" class="text-emerald-200 hover:text-white transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium border border-emerald-300">Projects</a>
+                <a href="about.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">About</a>
+                <a href="volunteer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium hidden md:inline-block">Volunteer</a>
+                <a href="contact.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-2">Our Key Initiatives</h2>
+        <p class="text-lg text-gray-500 mb-10 max-w-3xl">Explore the open-source climate projects and research initiatives currently being driven by the GreenTech Innovators community.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between">
+                <div>
+                    <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800 mb-3">Active</span>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">AI Reforestation Monitor</h3>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Using satellite imagery and machine learning to track reforestation success rates and identify areas needing intervention.
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-500 mb-2">Status: 85% Complete</p>
+                    <a href="#" class="inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-2 px-4 text-sm font-semibold text-white shadow-md hover:bg-blue-700 transition">
+                        View Codebase
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between">
+                <div>
+                    <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800 mb-3">Beta Testing</span>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Microclimate Data Hub</h3>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        A low-cost hardware and software solution for schools to collect and visualize real-time local weather data.
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-500 mb-2">Status: Needs Volunteers</p>
+                    <a href="contact.html" class="inline-flex justify-center rounded-lg border border-transparent bg-yellow-600 py-2 px-4 text-sm font-semibold text-white shadow-md hover:bg-yellow-700 transition">
+                        Join the Beta
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between">
+                <div>
+                    <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600 mb-3">Archived</span>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Legacy Data Parser</h3>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Script library used to standardize and clean pre-2010 climate datasets for use in modern models.
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-500 mb-2">Status: Maintenance Only</p>
+                    <a href="#" class="inline-flex justify-center rounded-lg border border-transparent bg-gray-400 py-2 px-4 text-sm font-semibold text-white cursor-not-allowed">
+                        Read Docs
+                    </a>
+                </div>
+            </div>
+            
+            </div>
+        
     </section>
-  </main>
 
-  <script src="assets/js/chatbot.js"></script>
+    <footer class="mt-12 py-6 border-t border-gray-200 text-center text-gray-500">
+        &copy; <span id="year"></span> GreenTech Innovators
+    </footer>
+
+    <script>
+        // Set current year dynamically for the footer
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
 </body>
 </html>
