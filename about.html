@@ -3,96 +3,117 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About Us – GreenTech Innovators</title>
+    <title>About — GreenTech Innovators</title>
 
     <link rel="icon" type="image/png" href="assets/greentech-innovators_logo.png" />
     
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        /* Custom scrollbar copied from Analyzer page */
+        /* Custom scrollbar copied from Analyzer page (Consistent) */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: #34d399; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #10b981; }
-
-        /* The Hero section needs a background image and a dark overlay */
-        .about-hero-bg {
-            background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        /* Dark overlay for readability (using Tailwind's dark transparent overlay) */
-        .about-hero-bg::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.45);
-        }
     </style>
 </head>
 
 <body class="bg-gray-50 font-sans antialiased text-gray-800">
 
-    <header class="bg-emerald-600 text-white shadow-lg sticky top-0 z-10">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
-            <h1 class="text-xl font-bold tracking-tight">GreenTech Innovators</h1>
-            <nav class="flex space-x-2 sm:space-x-4">
-                <a href="index.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                <a href="data_analyzer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Data Analyzer</a>
-                <a href="projects.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Projects</a>
-                <a href="about.html" class="text-emerald-200 hover:text-white transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium border border-emerald-300">About</a>
-                <a href="volunteer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium hidden md:inline-block">Volunteer</a>
-                <a href="contact.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Contact</a>
-            </nav>
+    <header class="bg-emerald-600 text-white shadow-lg sticky top-0 z-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between py-4">
+                <h1 class="text-xl font-bold tracking-tight">GreenTech Innovators</h1>
+                
+                <button id="menu-button" class="md:hidden p-2 rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-300" aria-label="Toggle menu">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                
+                <nav id="desktop-menu" class="hidden md:flex space-x-2 sm:space-x-4">
+                    <a href="index.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="data_analyzer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Data Analyzer</a>
+                    <a href="projects.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                    <a href="about.html" class="text-emerald-200 hover:text-white transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium border border-emerald-300">About</a>
+                    <a href="volunteer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium hidden lg:inline-block">Volunteer</a>
+                    <a href="contact.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                </nav>
+            </div>
         </div>
+        
+        <nav id="mobile-menu" class="hidden md:hidden bg-emerald-700 pb-2 transition-all duration-300 ease-in-out">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Home</a>
+                <a href="data_analyzer.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Data Analyzer</a>
+                <a href="projects.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Projects</a>
+                <a href="about.html" class="block bg-emerald-800 text-emerald-200 rounded-md px-3 py-2 text-base font-medium">About</a>
+                <a href="volunteer.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Volunteer</a>
+                <a href="contact.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Contact</a>
+            </div>
+        </nav>
     </header>
-    
-    <section class="about-hero-bg text-white text-center py-24 sm:py-32">
-        <div class="relative z-10 max-w-6xl mx-auto px-4">
-            <h1 class="text-5xl sm:text-6xl font-extrabold mb-4">About Us</h1>
-            <p class="text-xl font-medium opacity-90">Empowering students worldwide to use AI for climate impact.</p>
-        </div>
-    </section>
 
-    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
 
-        <section class="max-w-3xl mx-auto my-10">
-            <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Who We Are</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                GreenTech Innovators is a **student-led global initiative** dedicated to building accessible, impactful AI tools for understanding and addressing climate change. Our mission is to empower students, educators, and communities around the world to use technology for meaningful environmental action.
+        <section class="bg-white p-8 rounded-xl shadow-xl border border-gray-100">
+            <h2 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">Our Mission</h2>
+
+            <p class="text-lg text-gray-700 mb-6">
+                GreenTech Innovators is a non-profit organization dedicated to fostering **open-source development** and **citizen science** to combat climate change and promote sustainability globally. We believe that the biggest environmental challenges require collective action, cutting-edge technology, and transparent, accessible data.
             </p>
-            <p class="text-lg text-gray-700 leading-relaxed">
-                What began as a passion project has grown into a collaborative climate technology hub — where anyone can explore data, run AI-powered climate models, and contribute to open-source climate solutions.
-            </p>
-        </section>
-
-        <section class="max-w-4xl mx-auto my-10 pt-4 border-t border-gray-200">
-            <h2 class="text-3xl font-extrabold text-gray-900 mb-6 text-center">Our Founder</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 py-4">
-                <div class="team-card bg-white shadow-xl rounded-xl p-6 border border-gray-100 col-span-1 md:col-start-2">
-                    <h3 class="text-2xl font-semibold text-emerald-800 mb-1">Arnav Mishra</h3>
-                    <p class="text-base text-gray-600 mb-2">High School Student, HHS NJ</p>
-                    <p class="text-base font-bold text-gray-900 mb-4">Founder & Lead Developer</p>
-                    <p class="text-sm text-gray-700 leading-relaxed italic border-t pt-4 mt-4">
-                        Arnav is passionate about climate science, AI, and building tools that help students worldwide understand environmental change. He created GreenTech Innovators to make climate technology accessible to everyone.
-                    </p>
-                </div>
+            <h3 class="text-3xl font-bold text-gray-800 mt-8 mb-4">What We Do</h3>
+
+            <ul class="space-y-4 text-gray-700 list-disc list-inside ml-4">
+                <li class="pl-2">
+                    <span class="font-semibold text-emerald-600">Develop Tools:</span> Create and maintain open-source software, datasets, and hardware designs for environmental monitoring and analysis (like our Data Analyzer).
+                </li>
+                <li class="pl-2">
+                    <span class="font-semibold text-emerald-600">Empower Communities:</span> Facilitate citizen science initiatives, allowing local communities to collect, analyze, and use environmental data relevant to their regions.
+                </li>
+                <li class="pl-2">
+                    <span class="font-semibold text-emerald-600">Foster Collaboration:</span> Bridge the gap between software developers, environmental scientists, and policymakers through collaborative projects.
+                </li>
+            </ul>
+
+            <h3 class="text-3xl font-bold text-gray-800 mt-8 mb-4">Our Vision</h3>
+            <p class="text-lg text-gray-700 mb-6">
+                A world where technology and collective human effort create a truly sustainable planet. We aim to democratize access to environmental insights, turning passive concern into active, data-driven stewardship.
+            </p>
+
+            <h3 class="text-3xl font-bold text-gray-800 mt-8 mb-4">The Team</h3>
+            <p class="text-gray-700">
+                We are a diverse, global team of volunteers, including software engineers, data scientists, ecologists, and passionate activists, all dedicated to our common mission. We operate on a remote, fully volunteer basis, driven solely by impact.
+            </p>
+            
+            <div class="mt-8 text-center">
+                <a href="volunteer.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition duration-150">
+                    See How You Can Join Us
+                </a>
             </div>
         </section>
 
     </main>
 
     <footer class="mt-12 py-6 border-t border-gray-200 text-center text-gray-500">
-        &copy; <span id="year"></span> GreenTech Innovators
+        &copy; <span id="year4"></span> GreenTech Innovators
     </footer>
 
     <script>
-        // Set current year dynamically for the footer
-        document.getElementById('year').innerText = new Date().getFullYear();
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+
+        menuButton.addEventListener('click', () => {
+            const isExpanded = mobileMenu.classList.toggle('hidden');
+            menuIconOpen.classList.toggle('hidden', !isExpanded);
+            menuIconClose.classList.toggle('hidden', isExpanded);
+        });
+        
+        document.getElementById('year4').innerText = new Date().getFullYear()
     </script>
 </body>
 </html>
