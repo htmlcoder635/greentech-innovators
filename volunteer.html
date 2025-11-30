@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Volunteer – GreenTech Innovators</title>
+    <title>Volunteer — GreenTech Innovators</title>
 
     <link rel="icon" type="image/png" href="assets/greentech-innovators_logo.png" />
     
@@ -20,118 +20,132 @@
 
 <body class="bg-gray-50 font-sans antialiased text-gray-800">
 
-    <header class="bg-emerald-600 text-white shadow-lg sticky top-0 z-10">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
-            <h1 class="text-xl font-bold tracking-tight">GreenTech Innovators</h1>
-            <nav class="flex space-x-2 sm:space-x-4">
-                <a href="index.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                <a href="data_analyzer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Data Analyzer</a>
-                <a href="projects.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Projects</a>
-                <a href="about.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">About</a>
-                <a href="volunteer.html" class="text-emerald-200 hover:text-white transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium border border-emerald-300">Volunteer</a>
-                <a href="contact.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Contact</a>
-            </nav>
+    <header class="bg-emerald-600 text-white shadow-lg sticky top-0 z-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between py-4">
+                <h1 class="text-xl font-bold tracking-tight">GreenTech Innovators</h1>
+                
+                <button id="menu-button" class="md:hidden p-2 rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-300" aria-label="Toggle menu">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                
+                <nav id="desktop-menu" class="hidden md:flex space-x-2 sm:space-x-4">
+                    <a href="index.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="data_analyzer.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Data Analyzer</a>
+                    <a href="projects.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                    <a href="about.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">About</a>
+                    <a href="volunteer.html" class="text-emerald-200 hover:text-white transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium border border-emerald-300">Volunteer</a>
+                    <a href="contact.html" class="text-white hover:text-emerald-200 transition duration-150 ease-in-out px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                </nav>
+            </div>
         </div>
+        
+        <nav id="mobile-menu" class="hidden md:hidden bg-emerald-700 pb-2 transition-all duration-300 ease-in-out">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Home</a>
+                <a href="data_analyzer.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Data Analyzer</a>
+                <a href="projects.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Projects</a>
+                <a href="about.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">About</a>
+                <a href="volunteer.html" class="block bg-emerald-800 text-emerald-200 rounded-md px-3 py-2 text-base font-medium">Volunteer</a>
+                <a href="contact.html" class="block text-white hover:bg-emerald-600 hover:text-white rounded-md px-3 py-2 text-base font-medium">Contact</a>
+            </div>
+        </nav>
     </header>
-    
+
     <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
 
-        <h2 class="text-4xl font-extrabold text-gray-900 mb-2">Join the Movement</h2>
-        <p class="text-lg text-gray-500 mb-10 max-w-3xl">
-            GreenTech Innovators is entirely student-driven. We rely on volunteers from around the globe to contribute code, datasets, educational materials, and mentorship.
-        </p>
-
-        <section class="bg-emerald-100 p-8 rounded-xl shadow-lg mb-12 border-l-4 border-emerald-600">
-            <h3 class="text-2xl font-bold text-emerald-800 mb-3">Make a Real Impact</h3>
-            <p class="text-emerald-700 mb-4">
-                Whether you're a coder, a climate science student, an educator, or just passionate about the planet, your skills are needed here. All roles are flexible and remote.
+        <section class="mb-10 text-center">
+            <h2 class="text-4xl font-extrabold text-gray-900 mb-2">Volunteer With Us</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Lend your skills to combat climate change. We're looking for passionate individuals in a variety of roles—all remote and open-source.
             </p>
-            <a href="#roles" class="inline-flex justify-center rounded-lg border border-transparent bg-emerald-600 py-2 px-4 text-base font-semibold text-white shadow-md hover:bg-emerald-700 transition">
-                Explore Volunteer Roles
-            </a>
+        </section>
+        
+        <section class="bg-white p-8 rounded-xl shadow-xl border border-gray-100 mb-10">
+            <h3 class="text-3xl font-bold text-emerald-700 mb-6">Current Roles & Needs</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="p-4 border border-blue-200 rounded-lg bg-blue-50">
+                    <h4 class="text-xl font-semibold text-blue-800">Software Engineer (Python/JS)</h4>
+                    <p class="text-sm text-gray-600 mt-2">
+                        Help build and maintain our core analysis tools and backend infrastructure. Experience with data processing libraries is a plus.
+                    </p>
+                </div>
+
+                <div class="p-4 border border-purple-200 rounded-lg bg-purple-50">
+                    <h4 class="text-xl font-semibold text-purple-800">Data Scientist / Analyst</h4>
+                    <p class="text-sm text-gray-600 mt-2">
+                        Contribute to statistical modeling, data cleaning, and interpreting environmental datasets for our public reports.
+                    </p>
+                </div>
+
+                <div class="p-4 border border-yellow-200 rounded-lg bg-yellow-50">
+                    <h4 class="text-xl font-semibold text-yellow-800">Technical Writer / Editor</h4>
+                    <p class="text-sm text-gray-600 mt-2">
+                        Create clear documentation, project guides, and impactful reports summarizing our findings for a general audience.
+                    </p>
+                </div>
+
+                <div class="p-4 border border-emerald-200 rounded-lg bg-emerald-50">
+                    <h4 class="text-xl font-semibold text-emerald-800">Citizen Scientist Coordinator</h4>
+                    <p class="text-sm text-gray-600 mt-2">
+                        Help organize and manage remote data collection efforts and manage volunteer teams around specific ecological projects.
+                    </p>
+                </div>
+                
+                <div class="p-4 border border-red-200 rounded-lg bg-red-50">
+                    <h4 class="text-xl font-semibold text-red-800">UX/UI Designer (Figma/Web)</h4>
+                    <p class="text-sm text-gray-600 mt-2">
+                        Improve the usability and visual design of our web tools and mobile applications to make science more accessible.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center border-t pt-6">
+                <a href="contact.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 transition duration-150">
+                    Apply Now by Contacting Us
+                </a>
+            </div>
         </section>
 
-        <section id="roles">
-            <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Current Open Roles</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-                <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between hover:shadow-2xl transition duration-300">
-                    <div>
-                        <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800 mb-3">Technical</span>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Open Source Contributor</h3>
-                        <p class="text-gray-600 mb-4 text-sm">
-                            Help develop, debug, and enhance the Data Analyzer platform, LLM Tutor, and other core tools. Requires Python/JavaScript experience.
-                        </p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 mb-2">Time Commitment: Flexible</p>
-                        <a href="contact.html?role=Developer" class="inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-2 px-4 text-sm font-semibold text-white shadow-md hover:bg-blue-700 transition mt-2">
-                            Apply for this Role
-                        </a>
-                    </div>
-                </div>
-
-                <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between hover:shadow-2xl transition duration-300">
-                    <div>
-                        <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800 mb-3">Research</span>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Climate Data Curator</h3>
-                        <p class="text-gray-600 mb-4 text-sm">
-                            Identify, clean, and standardize publicly available environmental datasets to integrate into the Hub for student use.
-                        </p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 mb-2">Time Commitment: 3-5 hours/week</p>
-                        <a href="contact.html?role=DataCurator" class="inline-flex justify-center rounded-lg border border-transparent bg-yellow-600 py-2 px-4 text-sm font-semibold text-white shadow-md hover:bg-yellow-700 transition mt-2">
-                            Apply for this Role
-                        </a>
-                    </div>
-                </div>
-
-                <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between hover:shadow-2xl transition duration-300">
-                    <div>
-                        <span class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-800 mb-3">Education</span>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Content Creator / Mentor</h3>
-                        <p class="text-gray-600 mb-4 text-sm">
-                            Write tutorials, project guides, or act as an online mentor to students using the tools for their science fair or class projects.
-                        </p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 mb-2">Time Commitment: Varies by project</p>
-                        <a href="contact.html?role=Mentor" class="inline-flex justify-center rounded-lg border border-transparent bg-red-600 py-2 px-4 text-sm font-semibold text-white shadow-md hover:bg-red-700 transition mt-2">
-                            Apply for this Role
-                        </a>
-                    </div>
-                </div>
-
-                <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100 flex flex-col justify-between hover:shadow-2xl transition duration-300">
-                    <div>
-                        <span class="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-800 mb-3">Outreach</span>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Marketing & Outreach Team</h3>
-                        <p class="text-gray-600 mb-4 text-sm">
-                            Help promote GreenTech Innovators to schools, student groups, and communities to expand our global reach and impact.
-                        </p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 mb-2">Time Commitment: 2 hours/week</p>
-                        <a href="contact.html?role=Outreach" class="inline-flex justify-center rounded-lg border border-transparent bg-purple-600 py-2 px-4 text-sm font-semibold text-white shadow-md hover:bg-purple-700 transition mt-2">
-                            Apply for this Role
-                        </a>
-                    </div>
-                </div>
-
-            </div>
+        <section class="mt-10 p-8 bg-gray-100 rounded-xl border border-gray-200">
+            <h3 class="text-3xl font-bold text-gray-800 mb-4">How It Works</h3>
+            <ul class="space-y-4 text-gray-700 list-decimal list-inside ml-4">
+                <li class="pl-2">
+                    **Find Your Fit:** Review the roles above and find where your passion and skills align with our projects.
+                </li>
+                <li class="pl-2">
+                    **Reach Out:** Use the contact page to send us a short summary of your background, experience, and why you want to join GreenTech.
+                </li>
+                <li class="pl-2">
+                    **Start Contributing:** We'll connect you with the appropriate project lead to begin collaboration on a specific task or feature.
+                </li>
+            </ul>
         </section>
 
     </main>
 
     <footer class="mt-12 py-6 border-t border-gray-200 text-center text-gray-500">
-        &copy; <span id="year"></span> GreenTech Innovators
+        &copy; <span id="year5"></span> GreenTech Innovators
     </footer>
 
     <script>
-        // Set current year dynamically for the footer
-        document.getElementById('year').innerText = new Date().getFullYear();
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+
+        menuButton.addEventListener('click', () => {
+            const isExpanded = mobileMenu.classList.toggle('hidden');
+            menuIconOpen.classList.toggle('hidden', !isExpanded);
+            menuIconClose.classList.toggle('hidden', isExpanded);
+        });
+        
+        document.getElementById('year5').innerText = new Date().getFullYear()
     </script>
 </body>
 </html>
